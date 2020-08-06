@@ -1,6 +1,8 @@
 package nl.tipsntricks.games.controller;
 
 import nl.tipsntricks.games.domain.AppUser;
+import nl.tipsntricks.games.domain.Game;
+import nl.tipsntricks.games.domain.Role;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class AppUserController {
     public String deleteUser(@PathVariable long id) {
         Optional<AppUser> owner = appUserRepository.findById(id);
 
-        if(owner.isPresent()) {
+        if (owner.isPresent()) {
             appUserRepository.deleteById(id);
             return "User met id " + owner.get().getId() + " is verwijderd";
         }
@@ -43,13 +45,28 @@ public class AppUserController {
                     user.setEmail(updatedAppUser.getEmail());
                     return appUserRepository.save(user);
                 })
-                // Kan de user niet vinden in database
                 .orElseGet(() -> {
                     updatedAppUser.setId(id);
                     return appUserRepository.save(updatedAppUser);
                 });
     }
+
+    @PostMapping (value = "api/user/{id}/game")
+    public AppUser addGameToUser (@PathVariable long id,
+                                  @RequestBody Game newGame) {
+        return null;
+    }
+
+    @PutMapping(value = "/api/user/{id}/game")
+    public AppUser addRoleToUser(@PathVariable long id,
+                                 @RequestBody Role newRole) {
+        return null;
+    }
+
+    @PostMapping("/api/user/fill")
+    public AppUser addTestUsers() {
+        return null;
+    }
+
 }
-
-
 

@@ -28,7 +28,7 @@ public class AppUser {
     private String password;
 
 
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -36,13 +36,19 @@ public class AppUser {
 
 
     @ManyToMany
-    @JoinTable (name = "user_games",
-              joinColumns = @JoinColumn (name= "user_id"),
-              inverseJoinColumns = @JoinColumn (name= "game_id"))
-    private List <Games> gameslist;
+    @JoinTable (name = "game_user",
+              joinColumns = @JoinColumn (name= "game_id"),
+              inverseJoinColumns = @JoinColumn (name= "user_id"))
+    private List <Game> currentGames;
+
+    @ManyToMany
+    @JoinTable (name = "comment_user",
+              joinColumns = @JoinColumn (name= "comment_id"),
+              inverseJoinColumns = @JoinColumn (name= "user_id"))
+    private List <Comment> comments;
+
 
     public AppUser() {
-
     }
 
     public AppUser(String username, String email, String password) {
@@ -91,11 +97,16 @@ public class AppUser {
         this.roles = roles;
     }
 
-    public List<Games> getGameslist() {
-        return gameslist;
+    public List<Game> getCurrentGames() {
+        return currentGames;
     }
 
-    public void setGameslist(List gameslist) {
-        this.gameslist = gameslist;
-    }
+    public void setCurrentGames(List<Game> currentGames) { this.currentGames = currentGames; }
+
+    public String setRoles() { return ("User"); }
+
+    public List<Comment> getComments() { return comments;}
+
+    public void setCommentlist(List<Comment> comments) { this.comments = comments; }
 }
+

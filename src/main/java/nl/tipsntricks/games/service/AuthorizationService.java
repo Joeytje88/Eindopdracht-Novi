@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Validated
 public class AuthorizationService {
 
-    private static final String ROLE_NOT_FOUND_ERROR = "Error: Role is not found.";
+    private static final String ROLE_NOT_FOUND_ERROR = "Deze rol bestaat niet";
 
     private AppUserRepository appUserRepository;
     private PasswordEncoder encoder;
@@ -75,16 +75,15 @@ public class AuthorizationService {
         if (Boolean.TRUE.equals(appUserRepository.existsByUsername(signUpRequest.getUsername()))) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Fout:  Deze gebruikersnaam wordt al gebruikt!"));
         }
 
         if (Boolean.TRUE.equals(appUserRepository.existsByEmail(signUpRequest.getEmail()))) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+                    .body(new MessageResponse("Fout: Deze mail wordt al gebruikt!"));
         }
 
-        // Create new user's account
         AppUser appUser = new AppUser(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
@@ -98,17 +97,14 @@ public class AuthorizationService {
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
-                        roles.add(adminRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
-                        roles.add(userRole);
+                if ("admin".equals(role)) {
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
+                    roles.add(adminRole);
+                } else {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_ERROR));
+                    roles.add(userRole);
                 }
             });
         }
