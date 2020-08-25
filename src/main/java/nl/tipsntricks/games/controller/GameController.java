@@ -28,29 +28,18 @@ public class GameController {
     }
 
     @GetMapping(value = "/api/game/{gameId}")
-    public Game getGames(@PathVariable Long id) {
+    public Game getGame(@PathVariable Long id) {
         return gameRepository.findById(id).orElseThrow(
                 () -> new GameNotFoundException("Game is niet gevonden"));
     }
 
     @PostMapping(value = "/api/game")
-    public Game addGames(@RequestBody Game newGame) {
+    public Game addGame(@RequestBody Long id, Game newGame) {
         return gameRepository.save(newGame);
     }
 
-    @DeleteMapping(value = "/api/game/{gameid}")
-    public String deleteGames(@PathVariable Long id) {
-        Optional<Game> game = gameRepository.findById(id);
-        if (game.isPresent()) {
-            gameRepository.deleteById(id);
-            return "Game met id " + game.get().getGameId() + " is verwijderd";
-        } else {
-            return "Game is niet gevonden";
-        }
-    }
 
-    //TODO checken of game al bestaat en dan koppelen aan gebruiker
-    @PostMapping(value = "/api/game/{id}")
+    @PutMapping(value = "/api/game/{id}")
     public Game addGameToUser(@PathVariable Long id, @RequestBody Game newGame) {
         Optional<AppUser> user = appUserRepository.findById(id);
 
@@ -62,8 +51,6 @@ public class GameController {
             owners.add(userFromDb);
 
             newGame.setOwners(owners);
-
-            currentGames.add(newGame);
             userFromDb.setCurrentGames(currentGames);
 
             return gameRepository.save(newGame);
@@ -72,7 +59,15 @@ public class GameController {
     }
 
 
-    private boolean checkIsValidName(String name) {
-        return !name.contains("fuck") && !name.equalsIgnoreCase("");
+    @DeleteMapping(value = "/api/game/{gameid}")
+    public String deleteGames(@PathVariable Long id) {
+        Optional<Game> game = gameRepository.findById(id);
+        if (game.isPresent()) {
+            gameRepository.deleteById(id);
+            return "Game met id " + game.get().getGameId() + " is verwijderd";
+        } else {
+            return "Game is niet gevonden";
+        }
     }
 }
+

@@ -2,13 +2,8 @@ package nl.tipsntricks.games.domain;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Role {
@@ -22,11 +17,19 @@ public class Role {
             name = "native",
             strategy = "native"
     )
+
     @Column(columnDefinition = "serial")
     private long id;
 
     @Enumerated(EnumType.STRING)
     private ERole name;
+
+    @ManyToMany
+    @JoinTable (name = "user_role",
+             joinColumns = @JoinColumn(name = "user_id"),
+             inverseJoinColumns = @JoinColumn (name = "role_id"))
+    private List<AppUser> roles;
+
 
     public Role() {
     }
@@ -49,5 +52,12 @@ public class Role {
 
     public void setName(ERole name) {
         this.name = name;
+    }
+
+    public List<AppUser> getRoles() {
+        return roles;
+    }
+    public void setRoles(List<AppUser> roles) {
+        this.roles = roles;
     }
 }

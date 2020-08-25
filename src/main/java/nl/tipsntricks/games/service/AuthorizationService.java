@@ -63,14 +63,6 @@ public class AuthorizationService {
         this.jwtUtils = jwtUtils;
     }
 
-    /**
-     *
-     * Deze methode verwerkt de gebruiker die wil registreren. De username en e-mail worden gecheckt. Eventuele rollen
-     * worden toegevoegd en de gebruiker wordt opgeslagen in de database.
-     *
-     * @param signUpRequest de payload signup-request met gebruikersnaam en wachtwoord.
-     * @return een HTTP response met daarin een succesbericht.
-     */
     public ResponseEntity<MessageResponse> registerUser(@Valid SignupRequest signUpRequest) {
         if (Boolean.TRUE.equals(appUserRepository.existsByUsername(signUpRequest.getUsername()))) {
             return ResponseEntity
@@ -109,7 +101,7 @@ public class AuthorizationService {
             });
         }
 
-        appUser.setRoles(roles);
+        appUser.setRole();
         appUserRepository.save(appUser);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

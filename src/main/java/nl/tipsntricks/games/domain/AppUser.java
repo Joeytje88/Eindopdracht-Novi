@@ -1,4 +1,5 @@
 package nl.tipsntricks.games.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.List;
 
 @Entity
@@ -25,6 +25,8 @@ public class AppUser {
     private long id;
     private String username;
     private String email;
+
+    @JsonIgnore
     private String password;
 
 
@@ -32,7 +34,7 @@ public class AppUser {
     @JoinTable (name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List <Role> role;
 
 
     @ManyToMany
@@ -42,10 +44,10 @@ public class AppUser {
     private List <Game> currentGames;
 
     @ManyToMany
-    @JoinTable (name = "comment_user",
+    @JoinTable (name = "user_comment",
               joinColumns = @JoinColumn (name= "comment_id"),
               inverseJoinColumns = @JoinColumn (name= "user_id"))
-    private List <Comment> comments;
+    private List <Comment> comment;
 
 
     public AppUser() {
@@ -89,13 +91,9 @@ public class AppUser {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
+    public List <Role> getRole() { return role; }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    public void setRoles(List <Role> role) { this.role = role; }
 
     public List<Game> getCurrentGames() {
         return currentGames;
@@ -103,10 +101,10 @@ public class AppUser {
 
     public void setCurrentGames(List<Game> currentGames) { this.currentGames = currentGames; }
 
-    public String setRoles() { return ("User"); }
+    public String setRole() { return ("User"); }
 
-    public List<Comment> getComments() { return comments;}
+    public List<Comment> getComment() { return comment;}
 
-    public void setCommentlist(List<Comment> comments) { this.comments = comments; }
+    public void setComment (List<Comment> comments) { this.comment = comment; }
 }
 

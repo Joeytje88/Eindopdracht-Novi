@@ -1,7 +1,6 @@
 package nl.tipsntricks.games.repository;
 
 import nl.tipsntricks.games.domain.AppUser;
-import nl.tipsntricks.games.domain.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
