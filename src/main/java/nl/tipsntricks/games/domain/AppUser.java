@@ -1,5 +1,4 @@
 package nl.tipsntricks.games.domain;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,19 +15,24 @@ public class AppUser {
 
     @Id
     @GeneratedValue(
-            strategy= GenerationType.AUTO,
+            strategy= GenerationType.IDENTITY,
             generator="native"
     )
     @GenericGenerator(
             name = "native",
             strategy = "native"
     )
+
     @Column(columnDefinition = "serial")
     private long id;
+    @NotBlank
+    @Size(max = 20)
     private String username;
+    @NotBlank
+    @Size (max = 50)
     private String email;
 
-    @JsonIgnore
+    @NotBlank
     private String password;
 
 
@@ -105,6 +111,6 @@ public class AppUser {
 
     public List<Comment> getComment() { return comment;}
 
-    public void setComment (List<Comment> comments) { this.comment = comment; }
+    public void setComment (List<Comment> comments) { this.comment = comments; }
 }
 

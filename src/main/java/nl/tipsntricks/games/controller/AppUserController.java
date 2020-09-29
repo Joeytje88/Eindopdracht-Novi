@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin (origins ="http://localhost3000")
 @RestController
 public class AppUserController {
 

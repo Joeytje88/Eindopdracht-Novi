@@ -100,7 +100,6 @@ public class AuthorizationService {
                 }
             });
         }
-
         appUser.setRole();
         appUserRepository.save(appUser);
 
