@@ -52,7 +52,10 @@ public class AppUser {
     private Set <Game> currentGames;
 
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "appUser",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Comment> comments;
 
 

@@ -11,8 +11,7 @@ public class Comment {
 
     private String text;
 
-    @ManyToOne
-    @JoinColumn (name = "user_comments")
+    @ManyToOne(fetch = FetchType.LAZY)
     private AppUser appUser;
 
 
