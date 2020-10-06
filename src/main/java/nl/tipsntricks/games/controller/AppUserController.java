@@ -7,126 +7,71 @@ import nl.tipsntricks.games.domain.Role;
 import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
-import nl.tipsntricks.games.repository.GameRepository;
+import nl.tipsntricks.games.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-@CrossOrigin (origins ="http://localhost3000")
+@CrossOrigin (origins = "*", maxAge = 3600)
 @RestController
+
 public class AppUserController {
 
     @Autowired
     private AppUserRepository appUserRepository;
 
     @Autowired
-    private GameRepository gameRepository;
+    private AppUserService appUserService;
 
-
-    @GetMapping(value = "/api/users")
-    public List<AppUser> getOwners() {
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    @GetMapping(value = "/api/user")
+    public List<AppUser> user() {
         List<AppUser> user = appUserRepository.findAll();
         return user;
     }
 
-    @GetMapping(value = "/api/user/{id}")
-    public AppUser getUserById(@PathVariable Long id) {
-        Optional<AppUser> owner = appUserRepository.findById(id);
-        return owner.orElse(null);
+    @GetMapping(value = "/api/user/{userid}")
+    public AppUser getUserById( Long userid) {
+       return appUserService.getUserById(userid);
     }
 
-    @PostMapping(value = "/api/user/")
-    public AppUser addUser(@RequestBody AppUser newAppUser) {
-        return appUserRepository.save(newAppUser);
+    @PostMapping(value = "/api/user")
+    public AppUser addUser(AppUser newAppUser) {
+        return appUserService.addUser(newAppUser);
     }
 
-    @DeleteMapping(value = "/api/user/{id}")
-    public String deleteUser(@PathVariable long id) {
-        Optional<AppUser> owner = appUserRepository.findById(id);
-
-        if (owner.isPresent()) {
-            appUserRepository.deleteById(id);
-            return "Gebruikersnaam met id " + owner.get().getId() + " is verwijderd";
-        }
-        return "Gebruikersnaam niet gevonden";
+    @DeleteMapping(value = "/api/user/{userid}")
+    public String deleteUser(long userid){
+        return appUserService.deleteUser(userid);
     }
 
-    @PutMapping(value = "/api/user/{id}")
-    public AppUser updateUserById(@PathVariable long id, @RequestBody AppUser updatedAppUser) {
-        return appUserRepository.findById(id).map(
-                user -> {
-                    user.setUsername(updatedAppUser.getUsername());
-                    user.setEmail(updatedAppUser.getEmail());
-                    return appUserRepository.save(user);
-                })
-                .orElseGet(() -> {
-                    updatedAppUser.setId(id);
-                    return appUserRepository.save(updatedAppUser);
-                });
+    @PutMapping(value = "/api/user/{userid}")
+    public AppUser updateUserById(long userid, AppUser updatedAppUser) {
+        return appUserService.updateUserById(userid, updatedAppUser);
     }
 
-    @PostMapping(value = "api/user/{id}/game")
-    public AppUser addGameToUser(@PathVariable long id,
-                                 @RequestBody AppUser newUser) {
-        Optional<Game> game = gameRepository.findById(id);
-        if (game.isPresent()) {
-            Game gameFromDb = game.get();
-            List<AppUser> owners = gameFromDb.getOwners();
-
-            List<Game> currentGames = new ArrayList<>();
-            currentGames.add(gameFromDb);
-
-            newUser.setCurrentGames(currentGames);
-            gameFromDb.setOwners(owners);
-
-            return appUserRepository.save(newUser);
-        }
-        throw new GameNotFoundException("Game bestaat niet");
+    @PostMapping(value = "api/game/user/{userid}")
+    public AppUser addGameToUser(long userid, AppUser newUser) {
+        return appUserService.addGameToUser(userid, newUser);
     }
 
     @PreAuthorize("hasRole ('ROLE_ADMIN')")
-    @PutMapping(value = "/api/user/{id}/role")
-    public AppUser addRoleToUser(@PathVariable long id,
-                                 @RequestBody AppUser newUser) {
-        Optional<AppUser> user = appUserRepository.findById(id);
-
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            List<Role> roles = userFromDb.getRole();
-
-            List<AppUser> role = new ArrayList<>();
-            role.add(userFromDb);
-
-            newUser.setRoles(roles);
-            userFromDb.setRoles(roles);
-
-            return appUserRepository.save(newUser);
-        }
-        throw new UserNotFoundException("gebruiker niet gevonden");
+    @PutMapping(value = "/api/user/{userid}/role")
+    public AppUser addRoleToUser(long userid, AppUser newUser) {
+        return appUserService.addRoleToUser(userid, newUser);
     }
 
-    @PutMapping(value = "/api/user/{id}/comment")
-    public AppUser addCommentToUser(@PathVariable long id,
-                                    @RequestBody AppUser newUser) {
-        Optional<AppUser> user = appUserRepository.findById(id);
+    @PreAuthorize("hasRole ('ROLE_ADMIN') ")
+    @PutMapping AppUser demoteUserById (long userid){
+        return appUserService.demoteUserById(userid);
+    }
 
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            List<Comment> comment = userFromDb.getComment();
-
-            List<AppUser> comments = new ArrayList<>();
-            comments.add(userFromDb);
-
-            newUser.setComment(comment);
-            userFromDb.setComment(comment);
-
-            return appUserRepository.save(newUser);
-        }
-        throw new UserNotFoundException("gebruiker niet gevonden");
+    @PostMapping(value = "api/comment/{userid}")
+    public AppUser AddCommentToUser(@PathVariable long userid,
+                                 @RequestBody AppUser newUser) {
+        return appUserService.addCommentToUser(userid, newUser);
     }
 
 }

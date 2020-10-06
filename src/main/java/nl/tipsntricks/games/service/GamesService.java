@@ -1,6 +1,5 @@
 package nl.tipsntricks.games.service;
 
-import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Game;
 import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.repository.GameRepository;
@@ -20,78 +19,41 @@ public class GamesService implements IGamesService{
 
 
     @Override
-    public Game getGameById(Long id) {
-        return gameRepository.findById(id)
+    public Game getGameById(Long gameid) {
+        return gameRepository.findById(gameid)
                 .orElseThrow(()-> new GameNotFoundException("Game niet gevonden"));
     }
 
-
     @Override
     public Game addGame(Game newGame) {
-        String gameName = newGame.getName();
+        String gameName=  newGame.getName();
 
-        if (!gameName.contains("shit")){
+        if (checkIsValidName(gameName)){
             return gameRepository.save(newGame);
-        }
-        throw new GameNotFoundException("De naam van de game bevat scheldwoorden dat is niet toegestaan");
+        } throw new GameNotFoundException("game bestaat niet");
           }
 
     @Override
-    public Game updateGameById(Long id, Game updatedGame) {
-        Optional<Game> gameFromDB = gameRepository.findById(id);
+    public Game updateGameById(Long gameid, Game updatedGame) {
 
-        if (gameFromDB.isPresent()) {
-            if (checkIsValidName(updatedGame.getName())) {
-                Game game = new Game();
-                game.setName(updatedGame.getName());
-                game.setPublisher(updatedGame.getPublisher());
-                game.setDeveloper(updatedGame.getDeveloper());
-                game.setReleasedate(updatedGame.getReleasedate());
-                game.setPlatforms(updatedGame.getPlatforms());
-                return gameRepository.save(game);
-            }
-        }
-        throw new GameNotFoundException("De game bestaat niet");
+        String name = updatedGame.getName();
+        if (checkIsValidName(name)) {
+            Game game = new Game();
+            game.setName(updatedGame.getName());
+            return gameRepository.save(game);
+        } throw new GameNotFoundException ("game bestaat niet");
     }
 
     @Override
-    public String deleteGame(Long id) {
-        Optional<Game> game = gameRepository.findById(id);
+    public String deleteGame(Long gameid) {
+        Optional<Game> game = gameRepository.findById(gameid);
         if (game.isPresent()) {
-            gameRepository.deleteById(id);
-            return "Game met id" + game.get().getGameId() + "is verwijderd";
+            gameRepository.deleteById(gameid);
+            return "Game met id " + game.get().getGameId() + " is verwijderd";
         }
         throw new GameNotFoundException("Deze game bestaat niet");
     }
 
-    @Override
-    public Game addUsertoGame(Long id, AppUser updatedUser) {
-        return null;
-    }
-    /*@Override
-    public AppUser addUsertoGame(Long id, AppUser newUser) {
-        Optional<Game> game = gameRepository.findById(id);
-
-        if (game.isPresent()) {
-            Game gameFromdb = game.get();
-            List <AppUser> owners = gameFromdb.getOwners();
-
-            if (newUser.getGame() == null || newUser.getGame().getGameId() != id) {
-               newUser.setGame(gameFromdb);
-            }
-
-            owners.add(newUser);
-            gameFromdb.setOwners(owners);
-
-            return appUserRepository.save(owners);
-        }
-        throw new GameNotFoundException("Game bestaat niet");
-    }*/
-
-    @Override
-    public Game addTestGamesWithUser() {
-        return null;
-    }
     private boolean checkIsValidName(String name) {
         if(name.contains("fuck") || name.equalsIgnoreCase("")) {
             return false;

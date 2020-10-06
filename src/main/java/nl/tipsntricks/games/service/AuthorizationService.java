@@ -67,13 +67,13 @@ public class AuthorizationService {
         if (Boolean.TRUE.equals(appUserRepository.existsByUsername(signUpRequest.getUsername()))) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Fout:  Deze gebruikersnaam wordt al gebruikt!"));
+                    .body(new MessageResponse("Deze gebruikersnaam wordt al gebruikt!"));
         }
 
         if (Boolean.TRUE.equals(appUserRepository.existsByEmail(signUpRequest.getEmail()))) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Fout: Deze mail wordt al gebruikt!"));
+                    .body(new MessageResponse("Deze mail wordt al gebruikt!"));
         }
 
         AppUser appUser = new AppUser(signUpRequest.getUsername(),
@@ -100,7 +100,7 @@ public class AuthorizationService {
                 }
             });
         }
-        appUser.setRole();
+        appUser.setRoles(roles);
         appUserRepository.save(appUser);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -3,12 +3,12 @@ package nl.tipsntricks.games.service;
 import nl.tipsntricks.games.domain.Role;
 import nl.tipsntricks.games.exception.RoleNotFoundException;
 import nl.tipsntricks.games.repository.RoleRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
+@Service
 public class RoleService implements IRoleService {
-
 
     private final RoleRepository roleRepository;
 
@@ -20,12 +20,6 @@ public class RoleService implements IRoleService {
     public Role getRoleById(long id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new RoleNotFoundException("Rol niet gevonden"));
-
-    }
-
-    @Override
-    public Role addRole(Role newRole) {
-       return null;
     }
 
     @Override
@@ -38,16 +32,12 @@ public class RoleService implements IRoleService {
         throw new RoleNotFoundException("Deze rol bestaat niet (meer)");
     }
 
+//    @Override
+//    public Role addRole(Role newRole) {
+//        ERole roleName = newRole.getName();
+//            return  roleRepository.save(newRole);
+//        }
 
-    @Override
-    public Role addUsertoRole(long id, Role updatedRol) {
-        return null;
-    }
-
-    @Override
-    public Role AddTestRoleWithUser() {
-        return null;
-    }
 
     private boolean checkIsValidName(String name) {
         if(name.contains("fuck") || name.equalsIgnoreCase("")) {

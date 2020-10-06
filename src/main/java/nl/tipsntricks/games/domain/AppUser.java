@@ -1,4 +1,5 @@
 package nl.tipsntricks.games.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class AppUser {
@@ -24,7 +25,7 @@ public class AppUser {
     )
 
     @Column(columnDefinition = "serial")
-    private long id;
+    private long userid;
     @NotBlank
     @Size(max = 20)
     private String username;
@@ -33,6 +34,7 @@ public class AppUser {
     private String email;
 
     @NotBlank
+    @JsonIgnoreProperties
     private String password;
 
 
@@ -40,20 +42,18 @@ public class AppUser {
     @JoinTable (name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List <Role> role;
+    private Set <Role> roles;
 
 
     @ManyToMany
-    @JoinTable (name = "game_user",
-              joinColumns = @JoinColumn (name= "game_id"),
-              inverseJoinColumns = @JoinColumn (name= "user_id"))
-    private List <Game> currentGames;
+    @JoinTable (name = "user_games",
+            joinColumns = @JoinColumn (name= "user_id"),
+            inverseJoinColumns = @JoinColumn (name= "game_id"))
+    private Set <Game> currentGames;
 
-    @ManyToMany
-    @JoinTable (name = "user_comment",
-              joinColumns = @JoinColumn (name= "comment_id"),
-              inverseJoinColumns = @JoinColumn (name= "user_id"))
-    private List <Comment> comment;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Comment> comments;
 
 
     public AppUser() {
@@ -65,12 +65,12 @@ public class AppUser {
         this.password = password;
     }
 
-    public long getId() {
-        return id;
+    public long getUserid() {
+        return userid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(long userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {
@@ -97,20 +97,24 @@ public class AppUser {
         this.password = password;
     }
 
-    public List <Role> getRole() { return role; }
+    public Set<Role> getRoles() { return roles; }
 
-    public void setRoles(List <Role> role) { this.role = role; }
+    public void setRoles(Set <Role> roles) { this.roles = roles; }
 
-    public List<Game> getCurrentGames() {
+    public Set<Game> getCurrentGames() {
         return currentGames;
     }
 
-    public void setCurrentGames(List<Game> currentGames) { this.currentGames = currentGames; }
+    public void setCurrentGames(Set<Game> currentGames) {
+        this.currentGames = currentGames;
+    }
 
-    public String setRole() { return ("User"); }
+    public Set<Comment> getComments() {
+        return comments;
+    }
 
-    public List<Comment> getComment() { return comment;}
-
-    public void setComment (List<Comment> comments) { this.comment = comments; }
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
 }
 

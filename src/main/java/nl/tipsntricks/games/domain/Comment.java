@@ -1,9 +1,6 @@
 package nl.tipsntricks.games.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.*;;
 
 @Entity
 public class Comment {
@@ -11,16 +8,19 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long commentId;
+
     private String text;
 
-    @JsonIgnoreProperties ("comment")
-    @ManyToMany (fetch = FetchType.EAGER, mappedBy = "comment")
-    private List<AppUser> comments;
+    @ManyToOne
+    @JoinColumn (name = "user_comments")
+    private AppUser appUser;
+
 
     public Comment () {
     }
 
-    public Long getcommentId (){
+
+    public Long getId (){
         return commentId;
     }
     public void setId(long commentId) {
@@ -35,13 +35,11 @@ public class Comment {
         this.text = text;
     }
 
-    public List<AppUser> getComments() {
-        return comments;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setComments(List<AppUser> comments) {
-        this.comments = comments;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
-
-
 }

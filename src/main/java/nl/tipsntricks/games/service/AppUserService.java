@@ -1,14 +1,17 @@
 package nl.tipsntricks.games.service;
 
-import nl.tipsntricks.games.domain.AppUser;
-import nl.tipsntricks.games.domain.ERole;
-import nl.tipsntricks.games.domain.Game;
-import nl.tipsntricks.games.domain.Role;
+import nl.tipsntricks.games.domain.*;
+import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+@Service
 public class AppUserService implements IAppUserService {
 
 
@@ -19,16 +22,16 @@ public class AppUserService implements IAppUserService {
         this.appUserRepository= appUserRepository;
     }
     @Override
-    public AppUser getUserById(Long id) {
-        return appUserRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+    public AppUser getUserById(Long userid) {
+        return appUserRepository.findById(userid)
+                .orElseThrow(() -> new UserNotFoundException(userid));
     }
 
     @Override
     public AppUser addUser(AppUser newUser) {
         String userName = newUser.getUsername();
 
-        if (!userName.contains("fuck")) {
+        if (checkIsValidName(userName)) {
             return appUserRepository.save(newUser);
         }
         throw new UserNotFoundException("Gebruiker bestaat niet");
@@ -50,34 +53,78 @@ public class AppUserService implements IAppUserService {
     throw new UserNotFoundException("Gebruiker bestaat niet");
 }
     @Override
-    public String deleteUser(Long id) {
-        Optional<AppUser> user = appUserRepository.findById(id);
+    public String deleteUser(Long userid) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
         if (user.isPresent()) {
-            appUserRepository.deleteById(id);
-            return "Gebruiker met id " + user.get().getId() + "is verwijderd";
+            appUserRepository.deleteById(userid);
+            return "Gebruiker met id " + user.get().getUserid() + "is verwijderd";
         }
         throw new UserNotFoundException("Deze gebruiker bestaat niet");
     }
 
     @Override
-    public AppUser addGameToUser(Long id, Game neGame) {
-        return null;
+    public AppUser addGameToUser(Long userid, AppUser newUser) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
+        if (user.isPresent()) {
+            AppUser userFromDb = user.get();
+            Set<Game> currentGames = userFromDb.getCurrentGames();
+
+            Set<AppUser> gamesList = new HashSet<>();
+            gamesList.add(userFromDb);
+
+            newUser.setCurrentGames(currentGames);
+            userFromDb.setCurrentGames(currentGames);
+
+            return appUserRepository.save(newUser);
+        }
+        throw new GameNotFoundException("Game bestaat niet");
     }
 
-
     @Override
-    public AppUser addTestUserWithGame() {
-        return null;
+    public AppUser addCommentToUser(Long userid, AppUser newUser) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
+        if (user.isPresent()) {
+            AppUser userFromDb = user.get();
+            Set<Comment> comments  = userFromDb.getComments();
+
+            Set<AppUser> comment = new HashSet<>();
+            comment.add(userFromDb);
+
+            newUser.setComments(comments);
+            userFromDb.setComments(comments);
+
+            return appUserRepository.save(newUser);
+        }
+        throw new GameNotFoundException("Reactie bestaat niet");
     }
 
     @Override
-    public AppUser demoteUserById(long id) {
-        Optional<AppUser> user = appUserRepository.findById(id);
+    public AppUser addRoleToUser(long userid, AppUser newUser) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
+
+        if (user.isPresent()) {
+            AppUser userFromDb = user.get();
+            Set<Role> roles = userFromDb.getRoles();
+
+            Set <AppUser> appUser = new HashSet<>();
+            appUser.add(userFromDb);
+
+            newUser.setRoles(roles);
+            userFromDb.setRoles(roles);
+
+            return appUserRepository.save(newUser);
+        }
+        throw new UserNotFoundException("gebruiker niet gevonden");
+    }
+
+    @Override
+    public AppUser demoteUserById(long userid) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
         if (user.isPresent()) {
             AppUser userFromDb = user.get();
             Role adminRole = new Role(ERole.ROLE_ADMIN);
-            if(userFromDb.getRole().contains(adminRole)) {
-                userFromDb.getRole().remove(adminRole);
+            if(userFromDb.getRoles().contains(adminRole)) {
+                userFromDb.getRoles().remove(adminRole);
                 return appUserRepository.save(userFromDb);
             }
         }
