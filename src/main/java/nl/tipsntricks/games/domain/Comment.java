@@ -1,5 +1,7 @@
 package nl.tipsntricks.games.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;;
 
 @Entity
@@ -7,23 +9,22 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long commentId;
+    private long commentid;
 
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private AppUser appUser;
+    @JoinColumn(name = "user_id")
+    private AppUser user;
 
-
-    public Comment () {
+    public Comment (){
     }
 
-
-    public Long getId (){
-        return commentId;
+    public Long getCommentid (){
+        return commentid;
     }
-    public void setId(long commentId) {
-        this.commentId = commentId;
+    public void setId(long commentid) {
+        this.commentid = commentid;
     }
 
     public String  getText() {
@@ -34,11 +35,11 @@ public class Comment {
         this.text = text;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public AppUser user() {
+        return user;
     }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setUser(AppUser user) {
+        this.user = user;
     }
 }

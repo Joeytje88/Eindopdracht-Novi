@@ -2,9 +2,7 @@ package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Comment;
-import nl.tipsntricks.games.domain.Game;
 import nl.tipsntricks.games.exception.CommentNotFoundException;
-import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +54,9 @@ public class CommentService implements ICommentService {
         Optional<Comment> comment = commentRepository.findById(commentid);
         if (comment.isPresent()) {
             commentRepository.deleteById(commentid);
-            return "Game met id" + comment.get().getId() + "is verwijderd";
+            return "Reactie met id " + comment.get().getCommentid() +  " is verwijderd";
         }
-        throw new GameNotFoundException("Deze game bestaat niet");
+        throw new CommentNotFoundException("Deze reactie bestaat niet");
     }
     
 
@@ -68,7 +66,7 @@ public class CommentService implements ICommentService {
         if (user.isPresent()) {
             AppUser userFromDb = user.get();
 
-            newComment.setAppUser(userFromDb);
+            newComment.setUser(userFromDb);
             return commentRepository.save(newComment);
         }
         throw new CommentNotFoundException("reactie niet gevonden");

@@ -38,18 +38,19 @@ public class CommentController {
     public Comment addComment(@RequestBody Comment newComment) {
         return commentService.addComment(newComment);
     }
-    @PostMapping("/comment/{commentid}/{userId}")
-    public Comment addCommentToUser (Long userid, Comment newComment){
+
+    @PostMapping(value= "/api/comment/{userid}")
+    public Comment addCommentToUser (@PathVariable Long userid,@RequestBody Comment newComment){
         return commentService.addCommentToUser(userid, newComment);
     }
 
     @PutMapping(value = "/api/comment/{commentid}")
-    public Comment updateCommentById (long commentid, Comment updatedComment){
+    public Comment updateCommentById (@PathVariable long commentid,@RequestBody Comment updatedComment){
         return commentService.updateCommentById(commentid, updatedComment);
     }
 
     @DeleteMapping(value = "/api/comment/{commentid}")
-    public String deleteComment(Long commentid) {
+    public String deleteComment(@PathVariable Long commentid) {
         return commentService.deleteComment(commentid);
     }
 

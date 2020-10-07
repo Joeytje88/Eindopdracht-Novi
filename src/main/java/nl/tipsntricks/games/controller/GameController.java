@@ -20,6 +20,8 @@ public class GameController {
     private IGamesService gamesService;
 
 
+
+
     @GetMapping(value = "/api/games")
     public Game getGameById (long gameid){
         return gamesService.getGameById(gameid);
@@ -35,6 +37,10 @@ public class GameController {
         return gamesService.addGame(newGame);
     }
 
+    @PostMapping(value = "/api/game/user/{userid}")
+    public Game addGameToUser (@PathVariable Long userid, @RequestBody Game newGame) {
+        return gamesService.addGameToUser(userid, newGame);
+    }
 
     @PutMapping (value = "/api/game/{gameid}")
     public Game updateGameById (@PathVariable long gameid, @RequestBody Game updatedGame){

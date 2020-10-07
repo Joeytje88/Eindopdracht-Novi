@@ -7,9 +7,7 @@ import nl.tipsntricks.games.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AppUserService implements IAppUserService {
@@ -62,41 +60,6 @@ public class AppUserService implements IAppUserService {
         throw new UserNotFoundException("Deze gebruiker bestaat niet");
     }
 
-    @Override
-    public AppUser addGameToUser(Long userid, AppUser newUser) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            Set<Game> currentGames = userFromDb.getCurrentGames();
-
-            Set<AppUser> gamesList = new HashSet<>();
-            gamesList.add(userFromDb);
-
-            newUser.setCurrentGames(currentGames);
-            userFromDb.setCurrentGames(currentGames);
-
-            return appUserRepository.save(newUser);
-        }
-        throw new GameNotFoundException("Game bestaat niet");
-    }
-
-    @Override
-    public AppUser addCommentToUser(Long userid, AppUser newUser) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            Set<Comment> comments  = userFromDb.getComments();
-
-            Set<AppUser> comment = new HashSet<>();
-            comment.add(userFromDb);
-
-            newUser.setComments(comments);
-            userFromDb.setComments(comments);
-
-            return appUserRepository.save(newUser);
-        }
-        throw new GameNotFoundException("Reactie bestaat niet");
-    }
 
     @Override
     public AppUser addRoleToUser(long userid, AppUser newUser) {

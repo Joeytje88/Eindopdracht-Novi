@@ -37,41 +37,32 @@ public class AppUserController {
        return appUserService.getUserById(userid);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(value = "/api/user")
     public AppUser addUser(AppUser newAppUser) {
         return appUserService.addUser(newAppUser);
     }
 
     @DeleteMapping(value = "/api/user/{userid}")
-    public String deleteUser(long userid){
+    public String deleteUser(@PathVariable long userid){
         return appUserService.deleteUser(userid);
     }
 
     @PutMapping(value = "/api/user/{userid}")
-    public AppUser updateUserById(long userid, AppUser updatedAppUser) {
+    public AppUser updateUserById(@PathVariable long userid,@RequestBody AppUser updatedAppUser) {
         return appUserService.updateUserById(userid, updatedAppUser);
-    }
-
-    @PostMapping(value = "api/game/user/{userid}")
-    public AppUser addGameToUser(long userid, AppUser newUser) {
-        return appUserService.addGameToUser(userid, newUser);
     }
 
     @PreAuthorize("hasRole ('ROLE_ADMIN')")
     @PutMapping(value = "/api/user/{userid}/role")
-    public AppUser addRoleToUser(long userid, AppUser newUser) {
+    public AppUser addRoleToUser(@PathVariable long userid, @RequestBody AppUser newUser) {
         return appUserService.addRoleToUser(userid, newUser);
     }
 
     @PreAuthorize("hasRole ('ROLE_ADMIN') ")
-    @PutMapping AppUser demoteUserById (long userid){
+    @PutMapping (value = "/api/user/role/{userid}")
+    public AppUser demoteUserById (@PathVariable long userid){
         return appUserService.demoteUserById(userid);
-    }
-
-    @PostMapping(value = "api/comment/{userid}")
-    public AppUser AddCommentToUser(@PathVariable long userid,
-                                 @RequestBody AppUser newUser) {
-        return appUserService.addCommentToUser(userid, newUser);
     }
 
 }
