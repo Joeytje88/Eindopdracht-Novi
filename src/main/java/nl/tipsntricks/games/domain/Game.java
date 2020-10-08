@@ -6,13 +6,14 @@ import java.util.Set;
 @Entity
 public class Game {
 
-    @Id
+@Id
 @GeneratedValue (strategy = GenerationType.AUTO)
 private long gameId;
 private String name;
 
 @ManyToMany
 Set<AppUser> users;
+
 
     public Game (String name){
         this.name = name;

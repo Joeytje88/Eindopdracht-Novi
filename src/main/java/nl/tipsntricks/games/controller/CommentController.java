@@ -1,16 +1,11 @@
 package nl.tipsntricks.games.controller;
 
-import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Comment;
-import nl.tipsntricks.games.exception.CommentNotFoundException;
-import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.CommentRepository;
 import nl.tipsntricks.games.service.CommentService;
-import nl.tipsntricks.games.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin (origins = "*", maxAge = 3600)

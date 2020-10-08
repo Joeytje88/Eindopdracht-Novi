@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GameNotFoundAdvice {
 
-
     @ResponseBody
     @ExceptionHandler(GameNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String dogNotFoundHandler(GameNotFoundException ex) {
+    public String gameNotFoundHandler(GameNotFoundException ex) {
         return ex.getMessage();
     }
 }

@@ -20,8 +20,6 @@ public class GameController {
     private IGamesService gamesService;
 
 
-
-
     @GetMapping(value = "/api/games")
     public Game getGameById (long gameid){
         return gamesService.getGameById(gameid);

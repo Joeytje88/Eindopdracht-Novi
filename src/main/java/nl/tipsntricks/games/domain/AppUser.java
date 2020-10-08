@@ -51,6 +51,13 @@ public class AppUser {
             inverseJoinColumns = @JoinColumn (name= "game_id"))
     private Set <Game> currentGames;
 
+    @ManyToMany
+    @JoinTable (name= "platform_owners",
+            joinColumns = @JoinColumn(name= "user_id"),
+            inverseJoinColumns = @JoinColumn (name= "platform_id"))
+    private Set <Platform> platforms;
+
+
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -70,7 +77,7 @@ public class AppUser {
         return userid;
     }
 
-    public void setId(long userid) {
+    public void setUserId(long userid) {
         this.userid = userid;
     }
 
@@ -114,8 +121,18 @@ public class AppUser {
         return comments;
     }
 
+    public Set<Platform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(Set<Platform> platforms) {
+        this.platforms = platforms;
+    }
+
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+
+
     }
 }
 
