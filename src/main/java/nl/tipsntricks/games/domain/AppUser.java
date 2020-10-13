@@ -45,13 +45,13 @@ public class AppUser {
     private Set <Role> roles;
 
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable (name = "user_games",
             joinColumns = @JoinColumn (name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "game_id"))
     private Set <Game> currentGames;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.ALL)
     @JoinTable (name= "platform_owners",
             joinColumns = @JoinColumn(name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "platform_id"))

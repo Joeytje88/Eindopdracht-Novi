@@ -33,7 +33,7 @@ public class AppUserController {
     }
 
     @GetMapping(value = "/api/user/{userid}")
-    public AppUser getUserById( Long userid) {
+    public AppUser getUserById(@PathVariable Long userid) {
        return appUserService.getUserById(userid);
     }
 

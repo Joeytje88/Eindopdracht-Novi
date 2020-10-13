@@ -1,5 +1,6 @@
 package nl.tipsntricks.games.service;
 
+import nl.tipsntricks.games.domain.ERole;
 import nl.tipsntricks.games.domain.Role;
 import nl.tipsntricks.games.exception.RoleNotFoundException;
 import nl.tipsntricks.games.repository.RoleRepository;
@@ -34,7 +35,7 @@ public class RoleService implements IRoleService {
 
 //    @Override
 //    public Role addRole(Role newRole) {
-//        ERole roleName = newRole.getName();
+//        ERole name = newRole.getName();
 //            return  roleRepository.save(newRole);
 //        }
 

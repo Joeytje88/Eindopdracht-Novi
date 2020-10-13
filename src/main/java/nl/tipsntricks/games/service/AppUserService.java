@@ -19,6 +19,7 @@ public class AppUserService implements IAppUserService {
     public AppUserService (AppUserRepository appUserRepository){
         this.appUserRepository= appUserRepository;
     }
+
     @Override
     public AppUser getUserById(Long userid) {
         return appUserRepository.findById(userid)

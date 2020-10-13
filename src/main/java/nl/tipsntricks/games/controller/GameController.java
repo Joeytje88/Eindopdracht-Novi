@@ -1,13 +1,13 @@
 package nl.tipsntricks.games.controller;
 
 import nl.tipsntricks.games.domain.Game;
-import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.repository.GameRepository;
 import nl.tipsntricks.games.service.IGamesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+
 
 @CrossOrigin (origins = "*", maxAge =3600)
 @RestController
@@ -19,13 +19,18 @@ public class GameController {
     @Autowired
     private IGamesService gamesService;
 
+    @GetMapping
+    public List<Game> game() {
+        List<Game> games = gameRepository.findAll();
+        return games;
+    }
 
-    @GetMapping(value = "/api/games")
+    @GetMapping(value = "/api/game/{gameid}")
     public Game getGameById (long gameid){
         return gamesService.getGameById(gameid);
     }
 
-    @GetMapping(value = "/api/game/{gameId}")
+    @GetMapping(value = "/api/games")
     public Game getGames(@PathVariable Long gameId) {
         return gamesService.getGameById(gameId);
     }

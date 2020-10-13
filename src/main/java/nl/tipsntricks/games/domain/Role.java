@@ -22,7 +22,6 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private ERole name;
 
-
     public Role() {
     }
 

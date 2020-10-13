@@ -11,7 +11,7 @@ public class Game {
 private long gameId;
 private String name;
 
-@ManyToMany
+@ManyToMany (mappedBy = "currentGames", cascade = CascadeType.ALL)
 Set<AppUser> users;
 
 

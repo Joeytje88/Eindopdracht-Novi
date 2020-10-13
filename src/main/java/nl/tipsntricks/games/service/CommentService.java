@@ -29,13 +29,6 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Comment addComment(Comment newComment) {
-        String commentMessage = newComment.getText();
-        checkIsValidCommentMessage(commentMessage);
-        return commentRepository.save(newComment);
-    }
-
-    @Override
     public Comment updateCommentById(Long commentId, Comment updatedComment) {
         Optional<Comment> commentFromDB = commentRepository.findById(commentId);
 
@@ -43,7 +36,7 @@ public class CommentService implements ICommentService {
             if (checkIsValidCommentMessage(updatedComment.getText())) {
                 Comment comment = new Comment();
                 comment.setText(updatedComment.getText());
-                return commentRepository.save(comment);
+                return commentRepository.save(updatedComment);
             }
         }
         throw new CommentNotFoundException("Reactie bestaat niet");

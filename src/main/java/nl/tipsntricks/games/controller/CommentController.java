@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin (origins = "*", maxAge = 3600)
+
 public class CommentController {
 
     @Autowired
@@ -29,13 +30,8 @@ public class CommentController {
         return commentService.getCommentById(commentid);
     }
 
-    @PostMapping(value = "/api/comment")
-    public Comment addComment(@RequestBody Comment newComment) {
-        return commentService.addComment(newComment);
-    }
-
-    @PostMapping(value= "/api/comment/{userid}")
-    public Comment addCommentToUser (@PathVariable Long userid,@RequestBody Comment newComment){
+    @PostMapping(value= "/api/comment/user/{userid}")
+    public Comment addCommentToUser (@PathVariable long userid,@RequestBody Comment newComment){
         return commentService.addCommentToUser(userid, newComment);
     }
 
@@ -48,7 +44,5 @@ public class CommentController {
     public String deleteComment(@PathVariable Long commentid) {
         return commentService.deleteComment(commentid);
     }
-
-
 
 }
