@@ -19,20 +19,14 @@ public class GameController {
     @Autowired
     private IGamesService gamesService;
 
-    @GetMapping
-    public List<Game> game() {
-        List<Game> games = gameRepository.findAll();
-        return games;
+    @GetMapping(value = "/api/games")
+    public List<Game>getAllGames() {
+        return gameRepository.findAll();
     }
 
     @GetMapping(value = "/api/game/{gameid}")
-    public Game getGameById (long gameid){
+    public Game getGameById (@PathVariable long gameid){
         return gamesService.getGameById(gameid);
-    }
-
-    @GetMapping(value = "/api/games")
-    public Game getGames(@PathVariable Long gameId) {
-        return gamesService.getGameById(gameId);
     }
 
     @PostMapping(value = "/api/game")
@@ -40,7 +34,7 @@ public class GameController {
         return gamesService.addGame(newGame);
     }
 
-    @PostMapping(value = "/api/game/user/{userid}")
+    @PutMapping(value = "/api/game/user/{userid}")
     public Game addGameToUser (@PathVariable Long userid, @RequestBody Game newGame) {
         return gamesService.addGameToUser(userid, newGame);
     }

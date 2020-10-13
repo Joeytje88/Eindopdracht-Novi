@@ -4,8 +4,8 @@ import nl.tipsntricks.games.domain.Comment;
 
 public interface ICommentService {
 
-    Comment getCommentById (long commentId);
+    Comment getCommentById (Long commentid);
     Comment updateCommentById (Long commentid, Comment updatedComment);
-    String deleteComment (long commentid);
+    String deleteComment (Long commentid);
     Comment addCommentToUser (Long commentid, Comment newComment);
 }

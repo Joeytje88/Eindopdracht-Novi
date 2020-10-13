@@ -1,5 +1,7 @@
 package nl.tipsntricks.games.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,9 +11,12 @@ public class Game {
 @Id
 @GeneratedValue (strategy = GenerationType.AUTO)
 private long gameId;
+
+@Column(name = "game_title")
 private String name;
 
-@ManyToMany (mappedBy = "currentGames", cascade = CascadeType.ALL)
+
+@ManyToMany (mappedBy = "currentGames", cascade = CascadeType.MERGE)
 Set<AppUser> users;
 
 

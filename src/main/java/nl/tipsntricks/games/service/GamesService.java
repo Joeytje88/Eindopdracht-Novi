@@ -27,7 +27,7 @@ public class GamesService implements IGamesService{
     @Override
     public Game getGameById(Long gameid) {
         return gameRepository.findById(gameid)
-                .orElseThrow(()-> new GameNotFoundException("Game niet gevonden"));
+                .orElseThrow(()-> new GameNotFoundException("Game met id " +gameid +" niet gevonden"));
     }
 
     @Override
@@ -60,13 +60,14 @@ public class GamesService implements IGamesService{
 
     @Override
     public Game updateGameById(Long gameid, Game updatedGame) {
-
-        String name = updatedGame.getName();
-        if (checkIsValidName(name)) {
-            Game game = new Game();
-            game.setName(updatedGame.getName());
-            return gameRepository.save(game);
-        } throw new GameNotFoundException ("game bestaat niet");
+        return gameRepository.findById(gameid).map(
+                game -> {
+                    game.setName(updatedGame.getName());
+                    return gameRepository.save(game);
+                }).orElseGet(()->{
+            updatedGame.setGameId(gameid);
+            return gameRepository.save(updatedGame);
+        });
     }
 
     @Override

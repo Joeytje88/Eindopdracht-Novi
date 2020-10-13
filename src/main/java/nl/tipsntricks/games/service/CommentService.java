@@ -8,6 +8,7 @@ import nl.tipsntricks.games.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CommentService implements ICommentService {
@@ -23,33 +24,32 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Comment getCommentById(long id) {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> new CommentNotFoundException("Reactie niet gevonden"));
+    public Comment getCommentById(Long commentid) {
+        return commentRepository.findById(commentid)
+                .orElseThrow(() -> new CommentNotFoundException(commentid));
+    }
+    //geeft een 500 als comment niet bestaat?!
+
+    @Override
+    public Comment updateCommentById(Long commentid, Comment updatedComment) {
+        return commentRepository.findById(commentid).map(
+                comment -> {
+                    comment.setText(updatedComment.getText());
+                    return commentRepository.save(comment);
+                }).orElseGet(()->{
+                    updatedComment.setId(commentid);
+                    return commentRepository.save(updatedComment);
+        });
     }
 
     @Override
-    public Comment updateCommentById(Long commentId, Comment updatedComment) {
-        Optional<Comment> commentFromDB = commentRepository.findById(commentId);
-
-        if (commentFromDB.isPresent()) {
-            if (checkIsValidCommentMessage(updatedComment.getText())) {
-                Comment comment = new Comment();
-                comment.setText(updatedComment.getText());
-                return commentRepository.save(updatedComment);
-            }
-        }
-        throw new CommentNotFoundException("Reactie bestaat niet");
-    }
-
-    @Override
-    public String deleteComment(long commentid) {
+    public String deleteComment(Long commentid) {
         Optional<Comment> comment = commentRepository.findById(commentid);
         if (comment.isPresent()) {
             commentRepository.deleteById(commentid);
             return "Reactie met id " + comment.get().getCommentid() +  " is verwijderd";
         }
-        throw new CommentNotFoundException("Deze reactie bestaat niet");
+        return "Deze reactie bestaat niet";
     }
     
 
@@ -58,8 +58,11 @@ public class CommentService implements ICommentService {
         Optional<AppUser> user = appUserRepository.findById(userid);
         if (user.isPresent()) {
             AppUser userFromDb = user.get();
+            Set<Comment> comments = userFromDb.getComments();
 
+            comments.add(newComment);
             newComment.setUser(userFromDb);
+
             return commentRepository.save(newComment);
         }
         throw new CommentNotFoundException("reactie niet gevonden");

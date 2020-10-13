@@ -1,11 +1,6 @@
 package nl.tipsntricks.games.controller;
 
 import nl.tipsntricks.games.domain.AppUser;
-import nl.tipsntricks.games.domain.Comment;
-import nl.tipsntricks.games.domain.Game;
-import nl.tipsntricks.games.domain.Role;
-import nl.tipsntricks.games.exception.GameNotFoundException;
-import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;

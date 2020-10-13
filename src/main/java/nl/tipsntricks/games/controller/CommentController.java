@@ -2,7 +2,7 @@ package nl.tipsntricks.games.controller;
 
 import nl.tipsntricks.games.domain.Comment;
 import nl.tipsntricks.games.repository.CommentRepository;
-import nl.tipsntricks.games.service.CommentService;
+import nl.tipsntricks.games.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,27 +16,25 @@ public class CommentController {
     private CommentRepository commentRepository;
 
     @Autowired
-    private CommentService commentService;
+    private ICommentService commentService;
 
-    @SuppressWarnings("UnnecessaryLocalVariable")
     @GetMapping(value = "api/comments")
-    public List<Comment> comments() {
-        List<Comment> comment = commentRepository.findAll();
-        return comment;
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
     }
 
     @GetMapping(value = "/api/comment/{commentid}")
-    public Comment getComments(@PathVariable long commentid) {
+    public Comment getCommentById(@PathVariable Long commentid) {
         return commentService.getCommentById(commentid);
     }
 
-    @PostMapping(value= "/api/comment/user/{userid}")
-    public Comment addCommentToUser (@PathVariable long userid,@RequestBody Comment newComment){
+    @PutMapping(value= "/api/comment/user/{userid}")
+    public Comment addCommentToUser (@PathVariable Long userid,@RequestBody Comment newComment){
         return commentService.addCommentToUser(userid, newComment);
     }
 
     @PutMapping(value = "/api/comment/{commentid}")
-    public Comment updateCommentById (@PathVariable long commentid,@RequestBody Comment updatedComment){
+    public Comment updateCommentById (@PathVariable Long commentid, @RequestBody Comment updatedComment){
         return commentService.updateCommentById(commentid, updatedComment);
     }
 

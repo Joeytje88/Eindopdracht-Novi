@@ -45,19 +45,19 @@ public class AppUser {
     private Set <Role> roles;
 
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("users")
     @JoinTable (name = "user_games",
             joinColumns = @JoinColumn (name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "game_id"))
     private Set <Game> currentGames;
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (cascade = CascadeType.MERGE)
+    @JsonIgnoreProperties("owners")
     @JoinTable (name= "platform_owners",
             joinColumns = @JoinColumn(name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "platform_id"))
     private Set <Platform> platforms;
-
-
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,
             orphanRemoval = true)

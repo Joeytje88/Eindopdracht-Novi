@@ -37,20 +37,19 @@ public class AppUserService implements IAppUserService {
     }
 
     @Override
-    public AppUser updateUserById(Long id, AppUser updatedUser) {
-        Optional<AppUser> userFromDb = appUserRepository.findById(id);
-
-        if (userFromDb.isPresent()) {
-            if(checkIsValidName(updatedUser.getUsername())) {
-            AppUser appUser = new AppUser();
-            appUser.setUsername(updatedUser.getUsername());
-            appUser.setEmail(updatedUser.getEmail());
-            appUser.setPassword(updatedUser.getPassword());
-            return appUserRepository.save(appUser);
-        }
+    public AppUser updateUserById(Long userid, AppUser updatedUser) {
+        return appUserRepository.findById(userid).map(
+                appUser -> {
+                    appUser.setUsername(updatedUser.getUsername());
+                    appUser.setEmail(updatedUser.getEmail());
+                    appUser.setPassword(updatedUser.getPassword());
+                    return appUserRepository.save(appUser);
+                }).orElseGet(() -> {
+            updatedUser.setUserId(userid);
+            return appUserRepository.save(updatedUser);
+        });
     }
-    throw new UserNotFoundException("Gebruiker bestaat niet");
-}
+
     @Override
     public String deleteUser(Long userid) {
         Optional<AppUser> user = appUserRepository.findById(userid);
