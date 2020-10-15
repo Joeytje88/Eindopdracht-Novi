@@ -19,7 +19,7 @@ public class GameController {
     @Autowired
     private IGamesService gamesService;
 
-    @GetMapping(value = "/api/games")
+    @GetMapping(value = "/api/game")
     public List<Game>getAllGames() {
         return gameRepository.findAll();
     }

@@ -16,12 +16,15 @@ public class Comment {
     @NotBlank
     private String text;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private AppUser user;
 
     public Comment() {
+    }
+
+    public Comment (String text, String url){
+        this.text = text;
     }
 
     public Long getCommentid() {

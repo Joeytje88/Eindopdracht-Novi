@@ -32,13 +32,14 @@ public class GamesService implements IGamesService{
 
     @Override
     public Game addGame(Game newGame) {
-        String gameName=  newGame.getName();
-
-        if (checkIsValidName(gameName)){
-            return gameRepository.save(newGame);
-        } throw new GameNotFoundException("game bestaat niet");
-          }
-
+        if (!gameRepository.existsByName(newGame.getName())) {
+            String gameName = newGame.getName();
+            if (checkIsValidName(gameName)) {
+                return gameRepository.save(newGame);
+            }
+            throw new GameNotFoundException("game bestaat niet");
+        } throw new GameNotFoundException("game bestaat al");
+    }
     @Override
     public Game addGameToUser(Long userid, Game newGame) {
         Optional<AppUser> user = appUserRepository.findById(userid);

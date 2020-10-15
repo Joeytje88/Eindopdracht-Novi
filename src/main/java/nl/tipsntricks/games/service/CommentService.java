@@ -26,9 +26,9 @@ public class CommentService implements ICommentService {
     @Override
     public Comment getCommentById(Long commentid) {
         return commentRepository.findById(commentid)
-                .orElseThrow(() -> new CommentNotFoundException(commentid));
+                .orElseThrow(() -> new CommentNotFoundException("Reactie met id " +commentid +" niet gevonden"));
     }
-    //geeft een 500 als comment niet bestaat?!
+    //geeft een 500 als comment niet bestaat?! maar wel een exceptie via intellij
 
     @Override
     public Comment updateCommentById(Long commentid, Comment updatedComment) {
