@@ -3,7 +3,8 @@ package nl.tipsntricks.games.domain;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;;import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.xml.soap.Text;;import java.util.Date;
 
 @CrossOrigin(origins = "*",maxAge = 3600)
 @Entity
@@ -23,7 +24,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment (String text, String url){
+    public Comment (String text){
         this.text = text;
     }
 
