@@ -14,6 +14,7 @@ public class Platform {
     @ManyToMany (mappedBy = "platforms")
     Set<AppUser> owners;
 
+
     public Platform() {
         this.platformName = platformName;
     }
@@ -41,6 +42,7 @@ public class Platform {
     public void setOwners(Set<AppUser> owners) {
         this.owners = owners;
     }
+
 }
 
 

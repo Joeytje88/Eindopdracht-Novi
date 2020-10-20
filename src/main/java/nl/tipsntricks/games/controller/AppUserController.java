@@ -3,6 +3,7 @@ package nl.tipsntricks.games.controller;
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.service.AppUserService;
+import nl.tipsntricks.games.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +19,17 @@ public class AppUserController {
     private AppUserRepository appUserRepository;
 
     @Autowired
-    private AppUserService appUserService;
+    private IAppUserService appUserService;
 
-    @SuppressWarnings("UnnecessaryLocalVariable")
+
     @GetMapping(value = "/api/user")
-    public List<AppUser> user() {
-        List<AppUser> user = appUserRepository.findAll();
-        return user;
+    public List<AppUser> getAllUsers() {
+        return appUserRepository.findAll();
     }
 
     @GetMapping(value = "/api/user/{userid}")
     public AppUser getUserById(@PathVariable Long userid) {
        return appUserService.getUserById(userid);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping(value = "/api/user")
-    public AppUser addUser(AppUser newAppUser) {
-        return appUserService.addUser(newAppUser);
     }
 
     @DeleteMapping(value = "/api/user/{userid}")

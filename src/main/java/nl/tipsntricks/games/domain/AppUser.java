@@ -63,6 +63,11 @@ public class AppUser {
             orphanRemoval = true)
     private Set<Comment> comments;
 
+    @OneToOne(mappedBy = "userAccount")
+    private Account account;
+
+    @OneToMany(mappedBy = "author")
+    Set <Post> posts;
 
     public AppUser() {
     }
@@ -129,10 +134,24 @@ public class AppUser {
         this.platforms = platforms;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
 
+    public Set<Post> getPosts() {
+        return posts;
+    }
 
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 }
 

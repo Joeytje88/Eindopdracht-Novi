@@ -13,7 +13,7 @@ public class UserNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String dogNotFoundHandler(UserNotFoundException ex) {
+    public String userNotFoundHandler(UserNotFoundException ex) {
         return ex.getMessage();
     }
 }

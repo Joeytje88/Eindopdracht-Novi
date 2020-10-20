@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.xml.soap.Text;;import java.util.Date;
+
 
 @CrossOrigin(origins = "*",maxAge = 3600)
 @Entity
@@ -17,6 +17,9 @@ public class Comment {
     @NotBlank
     private String text;
 
+    @Column(columnDefinition = "text")
+    private String image;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private AppUser user;
@@ -26,6 +29,7 @@ public class Comment {
 
     public Comment (String text){
         this.text = text;
+        this.image = image;
     }
 
     public Long getCommentid() {
@@ -42,6 +46,14 @@ public class Comment {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public AppUser user() {

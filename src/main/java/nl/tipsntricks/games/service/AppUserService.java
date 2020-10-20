@@ -1,9 +1,9 @@
 package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.*;
-import nl.tipsntricks.games.exception.GameNotFoundException;
 import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
+import nl.tipsntricks.games.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,9 @@ public class AppUserService implements IAppUserService {
     private final AppUserRepository appUserRepository;
 
     @Autowired
+    public RoleRepository roleRepository;
+
+    @Autowired
     public AppUserService (AppUserRepository appUserRepository){
         this.appUserRepository= appUserRepository;
     }
@@ -24,16 +27,6 @@ public class AppUserService implements IAppUserService {
     public AppUser getUserById(Long userid) {
         return appUserRepository.findById(userid)
                 .orElseThrow(() -> new UserNotFoundException(userid));
-    }
-
-    @Override
-    public AppUser addUser(AppUser newUser) {
-        String userName = newUser.getUsername();
-
-        if (checkIsValidName(userName)) {
-            return appUserRepository.save(newUser);
-        }
-        throw new UserNotFoundException("Gebruiker bestaat niet");
     }
 
     @Override
@@ -62,15 +55,12 @@ public class AppUserService implements IAppUserService {
 
 
     @Override
-    public AppUser addRoleToUser(long userid, AppUser newUser) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
+    public AppUser addRoleToUser(long roleid, AppUser newUser) {
+        Optional<AppUser> user = appUserRepository.findById(roleid);
 
         if (user.isPresent()) {
             AppUser userFromDb = user.get();
             Set<Role> roles = userFromDb.getRoles();
-
-            Set <AppUser> appUser = new HashSet<>();
-            appUser.add(userFromDb);
 
             newUser.setRoles(roles);
             userFromDb.setRoles(roles);

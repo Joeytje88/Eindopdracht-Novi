@@ -19,7 +19,7 @@ public class PlatformController {
     private IPlatformService platformService;
 
     @GetMapping(value = "/api/platform/{platformid)")
-    Platform getPlatformById(@RequestBody long platformid) {
+    Platform getPlatformById(@PathVariable long platformid) {
         return platformService.getPlatformById(platformid);
     }
 

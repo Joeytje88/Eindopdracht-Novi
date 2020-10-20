@@ -35,6 +35,7 @@ public class CommentService implements ICommentService {
         return commentRepository.findById(commentid).map(
                 comment -> {
                     comment.setText(updatedComment.getText());
+                    comment.setImage(updatedComment.getImage());
                     return commentRepository.save(comment);
                 }).orElseGet(()->{
                     updatedComment.setId(commentid);

@@ -2,7 +2,7 @@ package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Game;
-import nl.tipsntricks.games.exception.GameNotFoundException;
+import nl.tipsntricks.games.exception.GameException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,9 @@ public class GamesService implements IGamesService{
     @Override
     public Game getGameById(Long gameid) {
         return gameRepository.findById(gameid)
-                .orElseThrow(()-> new GameNotFoundException("Game met id " +gameid +" niet gevonden"));
+                .orElseThrow(()-> new GameException("Game met id " +gameid +" niet gevonden"));
     }
+
 
     @Override
     public Game addGame(Game newGame) {
@@ -37,25 +38,28 @@ public class GamesService implements IGamesService{
             if (checkIsValidName(gameName)) {
                 return gameRepository.save(newGame);
             }
-            throw new GameNotFoundException("game bestaat niet");
-        } throw new GameNotFoundException("game bestaat al");
+            throw new GameException("game bestaat niet");
+        } throw new GameException("game alreeds toegevoegd");
     }
     @Override
     public Game addGameToUser(Long userid, Game newGame) {
         Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDB = user.get();
-            Set<Game> currentGames = userFromDB.getCurrentGames();
+        if (!gameRepository.existsByName(newGame.getName())) {
+            if (user.isPresent()) {
+                AppUser userFromDB = user.get();
+                Set<Game> currentGames = userFromDB.getCurrentGames();
 
-            Set<AppUser> users = new HashSet<>();
-            currentGames.add(newGame);
+                Set<AppUser> users = new HashSet<>();
+                currentGames.add(newGame);
 
-            newGame.setUsers(users);
-            userFromDB.setCurrentGames(currentGames);
+                newGame.setUsers(users);
+                userFromDB.setCurrentGames(currentGames);
 
-            return gameRepository.save(newGame);
+                return gameRepository.save(newGame);
+            }
+            throw new GameException("Game bestaat niet");
         }
-        throw new GameNotFoundException("Game bestaat niet");
+        throw new GameException("Je hebt deze game al eerder toegevoegd");
     }
 
 
@@ -78,7 +82,7 @@ public class GamesService implements IGamesService{
             gameRepository.deleteById(gameid);
             return "Game met id " + game.get().getGameId() + " is verwijderd";
         }
-        throw new GameNotFoundException("Deze game bestaat niet");
+        throw new GameException("Deze game bestaat niet");
     }
 
     private boolean checkIsValidName(String name) {

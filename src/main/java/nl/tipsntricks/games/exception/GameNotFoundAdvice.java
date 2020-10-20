@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GameNotFoundAdvice {
 
     @ResponseBody
-    @ExceptionHandler(GameNotFoundException.class)
+    @ExceptionHandler(GameException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String gameNotFoundHandler(GameNotFoundException ex) {
+    public String gameNotFoundHandler(GameException ex) {
         return ex.getMessage();
     }
 }

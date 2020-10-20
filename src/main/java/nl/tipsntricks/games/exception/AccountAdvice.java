@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class CommentNotFoundAdvice {
+public class AccountAdvice {
+
     @ResponseBody
-    @ExceptionHandler (CommentNotFoundException.class)
+    @ExceptionHandler (AccountException.class)
     @ResponseStatus (HttpStatus.NOT_FOUND)
-    public String commentNotFoundHandler (CommentNotFoundException ex)
+    public String accountNotFoundHandler(AccountException ex)
     {return ex.getMessage();}
 }
