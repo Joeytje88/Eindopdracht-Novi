@@ -22,6 +22,7 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
+
     @GetMapping (value= "/api/account/{accountid}")
     public Account getAccountById(@PathVariable long accountid){
         return accountService.getAccountById(accountid);
@@ -37,13 +38,12 @@ public class AccountController {
         return accountService.addAccountToUser(userid, newAccount);
     }
     @PutMapping(value = "api/account/{accountid}")
-    public Account updateAccountById (long accountid, Account updatedAccount){
+    public Account updateAccountById (@PathVariable long accountid, Account updatedAccount){
         return accountService.updateAccountById(accountid, updatedAccount);
     }
     @DeleteMapping(value = "api/account/{accountid}")
-    public String deleteAccountById (long accountid){
+    public String deleteAccountById (@PathVariable long accountid){
         return accountService.deleteAccountById(accountid);
     }
-
 
 }

@@ -15,11 +15,11 @@ public class PostController {
     private PostRepository postRepository;
 
     @Autowired
-    private IPostService iPostService;
+    private IPostService postService;
 
     @GetMapping(value = "api/post/{postid}")
     Post getPostById(@PathVariable long postid){
-        return iPostService.getPostById(postid);
+        return postService.getPostById(postid);
     }
 
     @GetMapping (value = "/api/posts")
@@ -29,21 +29,21 @@ public class PostController {
 
     @PostMapping (value = "api/post")
     public Post addPost(@RequestBody Post newPost){
-        return iPostService.addPost(newPost);
+        return postService.addPost(newPost);
     }
 
     @PutMapping(value = "api/post/user/{userid}")
-    public Post addPostToUser (@PathVariable long userid, @RequestBody Post newPost){
-        return iPostService.addPostToUser(userid,newPost);
+    public Post addPostToUser (@PathVariable long userid ,@RequestBody Post newPost){
+        return postService.addPostToUser(userid, newPost);
     }
 
     @PutMapping(value ="api/post/{postid}")
     Post updatePostById(@PathVariable long postid, @RequestBody Post updatedPost){
-        return iPostService.updatePostById(postid,updatedPost);
+        return postService.updatePostById(postid,updatedPost);
     }
 
     @DeleteMapping(value= "api/post/{postid}")
     String deletePostById(@PathVariable long postid){
-        return iPostService.deletePostById(postid);
+        return postService.deletePostById(postid);
     }
 }

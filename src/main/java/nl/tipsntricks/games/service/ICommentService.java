@@ -8,4 +8,5 @@ public interface ICommentService {
     Comment updateCommentById (Long commentid, Comment updatedComment);
     String deleteComment (Long commentid);
     Comment addCommentToUser (Long commentid, Comment newComment);
+    Comment addCommentToPost (long postid, Comment newComment);
 }

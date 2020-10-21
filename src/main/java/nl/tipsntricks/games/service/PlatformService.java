@@ -1,8 +1,10 @@
 package nl.tipsntricks.games.service;
 
+import nl.tipsntricks.games.domain.Account;
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Platform;
 import nl.tipsntricks.games.exception.PlatformNotFoundExecption;
+import nl.tipsntricks.games.repository.AccountRepository;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.PlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ public class PlatformService implements IPlatformService {
     private final PlatformRepository platformRepository;
 
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     public PlatformService(PlatformRepository platformRepository) {
@@ -44,25 +46,25 @@ public class PlatformService implements IPlatformService {
         return platformRepository.findById(platformid).map(
                 platform -> {
                     platform.setPlatformName(updatedPlatform.getPlatformName());
+                    platform.setAccounts(updatedPlatform.getAccounts());
                     return platformRepository.save(platform);
                 }).orElseGet(() -> {
             updatedPlatform.setPlatformid(platformid);
+            updatedPlatform.setPlatformName(updatedPlatform.getPlatformName());
+            updatedPlatform.setAccounts(updatedPlatform.getAccounts());
             return platformRepository.save(updatedPlatform);
         });
     }
 
     @Override
-    public Platform addPlatformToUser(Long userid, Platform newPlatform) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            Set<Platform> platformSet = userFromDb.getPlatforms();
+    public Platform addPlatformToUser(Long accountid, Platform newPlatform) {
+        Optional<Account> account = accountRepository.findById(accountid);
+        if (account.isPresent()) {
+            Account accountFromDb = account.get();
+            Set<Platform> platforms = accountFromDb.getPlatforms();
 
-            Set<AppUser> owners = new HashSet<>();
-            platformSet.add(newPlatform);
-
-            newPlatform.setOwners(owners);
-            userFromDb.setPlatforms(platformSet);
+            platforms.add(newPlatform);
+            accountFromDb.setPlatforms(platforms);
 
             return platformRepository.save(newPlatform);
         }

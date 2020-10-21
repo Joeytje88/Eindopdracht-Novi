@@ -20,17 +20,17 @@ public class Post {
     @Lob
     private String postText;
 
-    @OneToMany
-    @JoinColumn(name="postCategory_id")
-    Set<Category> categories;
-
-    @OneToMany (mappedBy = "post",cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    Set <Tag> tags;
+    @Lob
+    private String picture;
+    private String categorie;
+    private String tags;
 
     @ManyToOne(cascade =  CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private AppUser author;
+
+    @OneToMany (mappedBy = "post")
+    Set<Comment> postComments;
 
     public long getPostId() {
         return postId;
@@ -56,6 +56,22 @@ public class Post {
         this.postTitle = postTitle;
     }
 
+    public String getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public String getPostText() {
         return postText;
     }
@@ -64,19 +80,11 @@ public class Post {
         this.postText = postText;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
-
-    public Set<Tag> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
@@ -86,5 +94,13 @@ public class Post {
 
     public void setAuthor(AppUser author) {
         this.author = author;
+    }
+
+    public Set<Comment> getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(Set<Comment> postComments) {
+        this.postComments = postComments;
     }
 }

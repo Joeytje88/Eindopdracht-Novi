@@ -1,5 +1,6 @@
 package nl.tipsntricks.games.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,9 +23,6 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private ERole name;
-
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
-    Set<AppUser> appuser;
 
     public Role() {
     }
@@ -49,11 +47,4 @@ public class Role {
         this.name = name;
     }
 
-    public Set<AppUser> getAppuser() {
-        return appuser;
-    }
-
-    public void setAppuser(Set<AppUser> appuser) {
-        this.appuser = appuser;
-    }
 }

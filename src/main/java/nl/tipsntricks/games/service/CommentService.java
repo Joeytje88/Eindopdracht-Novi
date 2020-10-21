@@ -2,9 +2,11 @@ package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Comment;
+import nl.tipsntricks.games.domain.Post;
 import nl.tipsntricks.games.exception.CommentNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.CommentRepository;
+import nl.tipsntricks.games.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -22,6 +24,9 @@ public class CommentService implements ICommentService {
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public Comment getCommentById(Long commentid) {
@@ -63,6 +68,21 @@ public class CommentService implements ICommentService {
 
             comments.add(newComment);
             newComment.setUser(userFromDb);
+
+            return commentRepository.save(newComment);
+        }
+        throw new CommentNotFoundException("reactie niet gevonden");
+    }
+
+    @Override
+    public Comment addCommentToPost(long postid, Comment newComment) {
+        Optional<Post> post = postRepository.findById(postid);
+        if (post.isPresent()){
+            Post postFromDb = post.get();
+            Set<Comment> postComment = postFromDb.getPostComments();
+
+            postComment.add(newComment);
+            newComment.setPost(postFromDb);
 
             return commentRepository.save(newComment);
         }

@@ -24,7 +24,7 @@ public class AppUser {
             strategy = "native"
     )
 
-    @Column(columnDefinition = "serial")
+    @Column(name ="user_id")
     private long userid;
     @NotBlank
     @Size(max = 20)
@@ -37,27 +37,11 @@ public class AppUser {
     @JsonIgnoreProperties
     private String password;
 
-
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set <Role> roles;
-
-
-    @ManyToMany (cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties("users")
-    @JoinTable (name = "user_games",
-            joinColumns = @JoinColumn (name= "user_id"),
-            inverseJoinColumns = @JoinColumn (name= "game_id"))
-    private Set <Game> currentGames;
-
-    @ManyToMany (cascade = CascadeType.MERGE)
-    @JsonIgnoreProperties("owners")
-    @JoinTable (name= "platform_owners",
-            joinColumns = @JoinColumn(name= "user_id"),
-            inverseJoinColumns = @JoinColumn (name= "platform_id"))
-    private Set <Platform> platforms;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -114,24 +98,8 @@ public class AppUser {
 
     public void setRoles(Set <Role> roles) { this.roles = roles; }
 
-    public Set<Game> getCurrentGames() {
-        return currentGames;
-    }
-
-    public void setCurrentGames(Set<Game> currentGames) {
-        this.currentGames = currentGames;
-    }
-
     public Set<Comment> getComments() {
         return comments;
-    }
-
-    public Set<Platform> getPlatforms() {
-        return platforms;
-    }
-
-    public void setPlatforms(Set<Platform> platforms) {
-        this.platforms = platforms;
     }
 
     public Account getAccount() {

@@ -38,6 +38,11 @@ public class CommentController {
         return commentService.updateCommentById(commentid, updatedComment);
     }
 
+    @PutMapping(value = "api/comment/post/{postid}")
+    public Comment addCommentToPost (@PathVariable long postid, @RequestBody Comment newComment){
+        return commentService.addCommentToPost(postid, newComment);
+    }
+
     @DeleteMapping(value = "/api/comment/{commentid}")
     public String deleteComment(@PathVariable Long commentid) {
         return commentService.deleteComment(commentid);

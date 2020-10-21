@@ -24,12 +24,11 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private AppUser user;
 
-    public Comment() {
-    }
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    public Comment (String text){
-        this.text = text;
-        this.image = image;
+    public Comment() {
     }
 
     public Long getCommentid() {
@@ -63,5 +62,14 @@ public class Comment {
     public void setUser(AppUser user) {
         this.user = user;
     }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
 
 }

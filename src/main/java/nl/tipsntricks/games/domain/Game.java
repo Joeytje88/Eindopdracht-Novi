@@ -7,41 +7,38 @@ import java.util.Set;
 public class Game {
 
 @Id
-@GeneratedValue (strategy = GenerationType.AUTO)
+@GeneratedValue (strategy = GenerationType.IDENTITY)
 private long gameId;
 
 @Column(name = "game_title")
 private String name;
 
-@ManyToMany (mappedBy = "currentGames", cascade = CascadeType.MERGE)
-Set<AppUser> users;
+@ManyToMany (mappedBy = "currentGames", cascade = CascadeType.ALL)
+Set<Account> account;
 
-
-    public Game (String name){
-        this.name = name;
-    }
 
     public Game() {
 
     }
 
-public long getGameId() {
+    public long getGameId() {
     return gameId;
     }
-public void setGameId (long gameId) {
+    public void setGameId (long gameId) {
     this.gameId= gameId;
     }
-public String getName() {
+    public String getName() {
     return name;
     }
-public void setName(String name) {
+    public void setName(String name) {
     this.name= name;
     }
-    public Set<AppUser> getUsers() {
-        return users;
+
+    public Set<Account> getAccount() {
+        return account;
     }
-    public void setUsers(Set<AppUser> users) {
-        this.users = users;
+    public void setAccount(Set<Account> accounts) {
+        this.account = accounts;
     }
 
 }

@@ -3,6 +3,7 @@ package nl.tipsntricks.games.service;
 import nl.tipsntricks.games.domain.Account;;
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.exception.AccountException;
+import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AccountRepository;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +30,13 @@ public class AccountService implements IAccountService {
                 .orElseThrow(()-> new AccountException("Account met id " +accountid +" niet gevonden" ));
     }
 
+
     @Override
     public Account addAccount(Account newAccount) {
-        if(!accountRepository.existsByAccountName(newAccount.getAccountName())){
-            String accountName = newAccount.getAccountName();
-            if (checkIsValidAccountName(accountName)) {
+            String accountUrl = newAccount.getAccountUrl();
+            if (checkIsValidAccountName(accountUrl)) {
                 return accountRepository.save(newAccount);
             } throw new AccountException("account bestaat niet");
-        } throw new AccountException("Deze naam wordt al gebruikt");
     }
 
     @Override
@@ -58,8 +58,9 @@ public class AccountService implements IAccountService {
     public Account updateAccountById(long accountid, Account updatedAccount) {
        return accountRepository.findById(accountid).map(
                account -> {
-                   account.setAccountName(account.getAccountName());
+                   account.setAccountUrl(account.getAccountUrl());
                    account.setImage(account.getImage());
+                   account.setUserAccount(account.getUserAccount());
                    return accountRepository.save(account);
                }).orElseGet(() ->{
                    updatedAccount.setAccountid(accountid);
@@ -72,7 +73,7 @@ public class AccountService implements IAccountService {
         Optional<Account> account = accountRepository.findById(accountid);
         if (account.isPresent()) {
             accountRepository.deleteById(accountid);
-            return "Account met id " + account.get().getAccountid() + "is verwijderd";
+            return "Account met id " + account.get().getAccountid() + " is verwijderd";
         }
         throw new AccountException("Account bestaat niet");
     }

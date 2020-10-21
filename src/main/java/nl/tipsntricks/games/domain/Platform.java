@@ -12,7 +12,7 @@ public class Platform {
     private String platformName;
 
     @ManyToMany (mappedBy = "platforms")
-    Set<AppUser> owners;
+    Set<Account> accounts;
 
 
     public Platform() {
@@ -35,12 +35,12 @@ public class Platform {
         this.platformName = platformName;
     }
 
-    public Set<AppUser> getOwners() {
-        return owners;
+    public Set<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setOwners(Set<AppUser> owners) {
-        this.owners = owners;
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
     }
 
 }

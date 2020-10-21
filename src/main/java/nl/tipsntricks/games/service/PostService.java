@@ -1,7 +1,6 @@
 package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.AppUser;
-import nl.tipsntricks.games.domain.Category;
 import nl.tipsntricks.games.domain.Post;
 import nl.tipsntricks.games.exception.PostNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
@@ -33,9 +32,7 @@ public class PostService implements IPostService {
     @Override
     public Post addPost(Post newPost) {
             String postTitle = newPost.getPostTitle();
-            String postText= newPost.getPostText();
-            if (checkIsValidName(postTitle))
-                if (checkIsValidName(postText)){
+            if (checkIsValidName(postTitle)) {
         return postRepository.save(newPost);
     }
     throw new PostNotFoundException("post bestaat niet");
@@ -45,9 +42,12 @@ public class PostService implements IPostService {
     @Override
     public Post addPostToUser(long userid, Post newPost) {
         Optional <AppUser> user = appUserRepository.findById(userid);
-        if(user.isPresent()){
+        if(user.isPresent()) {
             AppUser userFromDb= user.get();
             Set <Post> posts = userFromDb.getPosts();
+
+            AppUser author = new AppUser();
+            author.setPosts(posts);
 
             posts.add(newPost);
             userFromDb.setPosts(posts);
@@ -64,10 +64,11 @@ public class PostService implements IPostService {
                     post.setPostTitle(updatedPost.getPostTitle());
                     post.setPostText(updatedPost.getPostText());
                     post.setPostURL(updatedPost.getPostURL());
+                    post.setAuthor(updatedPost.getAuthor());
+                    post.setCategorie(updatedPost.getCategorie());
                     return postRepository.save(post);
                 }).orElseGet(() -> {
                     updatedPost.setPostId(postid);
-                    updatedPost.setAuthor(updatedPost.getAuthor());
                     return postRepository.save(updatedPost);
                 });
     }
@@ -84,8 +85,10 @@ public class PostService implements IPostService {
     }
 
 
-private boolean checkIsValidName(String name) {
-        if(name.contains("fuck")) {
-        return false; }
-        return true; }
+private boolean checkIsValidName(String postTitle) {
+    if (postTitle.contains("poep") || postTitle.equalsIgnoreCase("")) {
+        return false;
+    }
+    return true;
+}
         }

@@ -1,8 +1,10 @@
 package nl.tipsntricks.games.service;
 
+import nl.tipsntricks.games.domain.Account;
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Game;
 import nl.tipsntricks.games.exception.GameException;
+import nl.tipsntricks.games.repository.AccountRepository;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class GamesService implements IGamesService{
     private final GameRepository gameRepository;
 
     @Autowired
-    private AppUserRepository appUserRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     public GamesService(GameRepository gameRepository){
@@ -42,18 +44,15 @@ public class GamesService implements IGamesService{
         } throw new GameException("game alreeds toegevoegd");
     }
     @Override
-    public Game addGameToUser(Long userid, Game newGame) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
+    public Game addGameToAccount(Long accountid, Game newGame) {
+        Optional<Account> account= accountRepository.findById(accountid);
         if (!gameRepository.existsByName(newGame.getName())) {
-            if (user.isPresent()) {
-                AppUser userFromDB = user.get();
-                Set<Game> currentGames = userFromDB.getCurrentGames();
+            if (account.isPresent()) {
+                Account accountFromDB = account.get();
+                Set<Game> currentGames = accountFromDB.getCurrentGames();
 
-                Set<AppUser> users = new HashSet<>();
                 currentGames.add(newGame);
-
-                newGame.setUsers(users);
-                userFromDB.setCurrentGames(currentGames);
+                accountFromDB.setCurrentGames(currentGames);
 
                 return gameRepository.save(newGame);
             }
