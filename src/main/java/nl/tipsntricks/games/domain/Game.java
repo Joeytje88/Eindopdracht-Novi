@@ -14,7 +14,7 @@ private long gameId;
 private String name;
 
 @ManyToMany (mappedBy = "currentGames", cascade = CascadeType.ALL)
-Set<Account> account;
+Set<AppUser> users;
 
 
     public Game() {
@@ -34,12 +34,12 @@ Set<Account> account;
     this.name= name;
     }
 
-    public Set<Account> getAccount() {
-        return account;
-    }
-    public void setAccount(Set<Account> accounts) {
-        this.account = accounts;
+    public Set<AppUser> getUsers() {
+        return users;
     }
 
+    public void setUsers(Set<AppUser> users) {
+        this.users = users;
+    }
 }
 

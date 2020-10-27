@@ -12,11 +12,10 @@ public class Platform {
     private String platformName;
 
     @ManyToMany (mappedBy = "platforms")
-    Set<Account> accounts;
+    Set<AppUser> user;
 
 
     public Platform() {
-        this.platformName = platformName;
     }
 
     public Long getPlatformid() {
@@ -35,14 +34,13 @@ public class Platform {
         this.platformName = platformName;
     }
 
-    public Set<Account> getAccounts() {
-        return accounts;
+    public Set<AppUser> getUser() {
+        return user;
     }
 
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
+    public void setUser(Set<AppUser> user) {
+        this.user = user;
     }
-
 }
 
 

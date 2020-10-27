@@ -21,7 +21,6 @@ public class AppUserController {
     @Autowired
     private IAppUserService appUserService;
 
-
     @GetMapping(value = "/api/user")
     public List<AppUser> getAllUsers() {
         return appUserRepository.findAll();

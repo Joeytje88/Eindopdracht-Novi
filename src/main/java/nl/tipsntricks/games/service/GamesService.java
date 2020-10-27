@@ -1,15 +1,13 @@
 package nl.tipsntricks.games.service;
 
-import nl.tipsntricks.games.domain.Account;
 import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Game;
 import nl.tipsntricks.games.exception.GameException;
-import nl.tipsntricks.games.repository.AccountRepository;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -19,7 +17,7 @@ public class GamesService implements IGamesService{
     private final GameRepository gameRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     public GamesService(GameRepository gameRepository){
@@ -44,21 +42,24 @@ public class GamesService implements IGamesService{
         } throw new GameException("game alreeds toegevoegd");
     }
     @Override
-    public Game addGameToAccount(Long accountid, Game newGame) {
-        Optional<Account> account= accountRepository.findById(accountid);
+    public Game addGameToUser(Long userid, Game newGame) {
+        Optional<AppUser> appUser = appUserRepository.findById(userid);
         if (!gameRepository.existsByName(newGame.getName())) {
-            if (account.isPresent()) {
-                Account accountFromDB = account.get();
-                Set<Game> currentGames = accountFromDB.getCurrentGames();
+            if (appUser.isPresent()) {
+                AppUser userFromDB = appUser.get();
+                Set<AppUser> users = newGame.getUsers();
 
+                Set<Game> currentGames = userFromDB.getCurrentGames();
                 currentGames.add(newGame);
-                accountFromDB.setCurrentGames(currentGames);
+
+                userFromDB.setCurrentGames(currentGames);
+                newGame.setUsers(users);
 
                 return gameRepository.save(newGame);
             }
             throw new GameException("Game bestaat niet");
         }
-        throw new GameException("Je hebt deze game al eerder toegevoegd");
+        throw new GameException("game al toegevoegd");
     }
 
 

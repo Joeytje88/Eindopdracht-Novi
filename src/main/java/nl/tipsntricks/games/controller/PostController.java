@@ -1,5 +1,6 @@
 package nl.tipsntricks.games.controller;
 
+import nl.tipsntricks.games.domain.Comment;
 import nl.tipsntricks.games.domain.Post;
 import nl.tipsntricks.games.repository.PostRepository;
 import nl.tipsntricks.games.service.IPostService;
@@ -35,6 +36,11 @@ public class PostController {
     @PutMapping(value = "api/post/user/{userid}")
     public Post addPostToUser (@PathVariable long userid ,@RequestBody Post newPost){
         return postService.addPostToUser(userid, newPost);
+    }
+
+    @PutMapping(value = "api/post/{postid}/comment/{commentid}")
+    public Post addCommentToPost (@PathVariable long postid, @PathVariable long commentid, @RequestBody Comment newComment){
+        return postService.addCommentToPost(postid, commentid, newComment);
     }
 
     @PutMapping(value ="api/post/{postid}")

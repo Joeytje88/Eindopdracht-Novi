@@ -17,6 +17,8 @@ public class Post {
     @Column(name = "post_title")
     private String postTitle;
 
+    private String header;
+
     @Lob
     private String postText;
 
@@ -54,6 +56,14 @@ public class Post {
 
     public void setPostTitle(String postTitle) {
         this.postTitle = postTitle;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
     }
 
     public String getCategorie() {

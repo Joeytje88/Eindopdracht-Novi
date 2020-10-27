@@ -9,6 +9,8 @@ import nl.tipsntricks.games.repository.CommentRepository;
 import nl.tipsntricks.games.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -68,21 +70,6 @@ public class CommentService implements ICommentService {
 
             comments.add(newComment);
             newComment.setUser(userFromDb);
-
-            return commentRepository.save(newComment);
-        }
-        throw new CommentNotFoundException("reactie niet gevonden");
-    }
-
-    @Override
-    public Comment addCommentToPost(long postid, Comment newComment) {
-        Optional<Post> post = postRepository.findById(postid);
-        if (post.isPresent()){
-            Post postFromDb = post.get();
-            Set<Comment> postComment = postFromDb.getPostComments();
-
-            postComment.add(newComment);
-            newComment.setPost(postFromDb);
 
             return commentRepository.save(newComment);
         }

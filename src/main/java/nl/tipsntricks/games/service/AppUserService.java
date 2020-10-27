@@ -36,6 +36,8 @@ public class AppUserService implements IAppUserService {
                     appUser.setUsername(updatedUser.getUsername());
                     appUser.setEmail(updatedUser.getEmail());
                     appUser.setPassword(updatedUser.getPassword());
+                    appUser.setPicture(updatedUser.getPicture());
+                    appUser.setUrl(updatedUser.getUrl());
                     return appUserRepository.save(appUser);
                 }).orElseGet(() -> {
             updatedUser.setUserId(userid);
@@ -76,12 +78,13 @@ public class AppUserService implements IAppUserService {
         if (user.isPresent()) {
             AppUser userFromDb = user.get();
             Role adminRole = new Role(ERole.ROLE_ADMIN);
-            if(userFromDb.getRoles().contains(adminRole)) {
+            if (userFromDb.getRoles().contains(adminRole)) {
                 userFromDb.getRoles().remove(adminRole);
                 return appUserRepository.save(userFromDb);
             }
+            return user.get();
         }
-        return user.get();
+        throw new UserNotFoundException("gebruiker niet gevonden");
     }
 
     private boolean checkIsValidName(String name) {

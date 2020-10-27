@@ -1,7 +1,9 @@
 package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.AppUser;
+import nl.tipsntricks.games.domain.Comment;
 import nl.tipsntricks.games.domain.Post;
+import nl.tipsntricks.games.exception.CommentNotFoundException;
 import nl.tipsntricks.games.exception.PostNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.PostRepository;
@@ -58,6 +60,21 @@ public class PostService implements IPostService {
     }
 
     @Override
+    public Post addCommentToPost(long postid,long commentid, Comment newComment) {
+        Optional<Post> post = postRepository.findById(postid);
+        if (post.isPresent()){
+            Post postFromDb = post.get();
+            Set<Comment> postComments = postFromDb.getPostComments();
+
+            postComments.add(newComment);
+            postFromDb.setPostComments(postComments);
+
+            return postRepository.save(postFromDb);
+        }
+        throw new PostNotFoundException("post niet gevonden");
+    }
+
+    @Override
     public Post updatePostById(long postid, Post updatedPost) {
         return postRepository.findById(postid).map(
                 post -> {
@@ -66,6 +83,7 @@ public class PostService implements IPostService {
                     post.setPostURL(updatedPost.getPostURL());
                     post.setAuthor(updatedPost.getAuthor());
                     post.setCategorie(updatedPost.getCategorie());
+                    post.setHeader(updatedPost.getHeader());
                     return postRepository.save(post);
                 }).orElseGet(() -> {
                     updatedPost.setPostId(postid);

@@ -26,16 +26,20 @@ public class AppUser {
 
     @Column(name ="user_id")
     private long userid;
-    @NotBlank
+
     @Size(max = 20)
     private String username;
-    @NotBlank
+
     @Size (max = 50)
     private String email;
 
-    @NotBlank
-    @JsonIgnoreProperties
+
     private String password;
+
+    @Lob
+    private String picture;
+
+    private String Url;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name = "user_role",
@@ -43,15 +47,29 @@ public class AppUser {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set <Role> roles;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,
+    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("users")
+    @JoinTable (name = "user_games",
+            joinColumns = @JoinColumn (name= "user_id"),
+            inverseJoinColumns = @JoinColumn (name= "game_id"))
+    private Set<Game> currentGames;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.MERGE,
             orphanRemoval = true)
     private Set<Comment> comments;
 
-    @OneToOne(mappedBy = "userAccount")
-    private Account account;
-
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     Set <Post> posts;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    Set <Topic> topics;
+
+    @ManyToMany (cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("owners")
+    @JoinTable (name= "user_platforms",
+            joinColumns = @JoinColumn(name= "user_id"),
+            inverseJoinColumns = @JoinColumn (name= "platform_id"))
+    private Set <Platform> platforms;
 
     public AppUser() {
     }
@@ -94,20 +112,36 @@ public class AppUser {
         this.password = password;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getUrl() {
+        return Url;
+    }
+
+    public void setUrl(String url) {
+        Url = url;
+    }
+
+    public Set<Platform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(Set<Platform> platforms) {
+        this.platforms = platforms;
+    }
+
     public Set<Role> getRoles() { return roles; }
 
     public void setRoles(Set <Role> roles) { this.roles = roles; }
 
     public Set<Comment> getComments() {
         return comments;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public void setComments(Set<Comment> comments) {
@@ -118,8 +152,28 @@ public class AppUser {
         return posts;
     }
 
+    public Set<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(Set<Topic> topics) {
+        this.topics = topics;
+    }
+
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
+    }
+
+    public void setUserid(long userid) {
+        this.userid = userid;
+    }
+
+    public Set<Game> getCurrentGames() {
+        return currentGames;
+    }
+
+    public void setCurrentGames(Set<Game> currentGames) {
+        this.currentGames = currentGames;
     }
 }
 
