@@ -1,8 +1,12 @@
 package nl.tipsntricks.games.service;
 
 import nl.tipsntricks.games.domain.*;
+import nl.tipsntricks.games.exception.CommentNotFoundException;
+import nl.tipsntricks.games.exception.GameException;
+import nl.tipsntricks.games.exception.PostNotFoundException;
 import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
+import nl.tipsntricks.games.repository.GameRepository;
 import nl.tipsntricks.games.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,9 @@ public class AppUserService implements IAppUserService {
 
 
     private final AppUserRepository appUserRepository;
+
+    @Autowired
+    public GameRepository gameRepository;
 
     @Autowired
     public RoleRepository roleRepository;
@@ -55,6 +62,66 @@ public class AppUserService implements IAppUserService {
         throw new UserNotFoundException("Deze gebruiker bestaat niet");
     }
 
+    @Override
+    public AppUser addGameToUser(long userid, Game newGame) {
+            Optional<AppUser> appUser = appUserRepository.findById(userid);
+            if (!gameRepository.existsByName(newGame.getName())) {
+                if (appUser.isPresent()) {
+                    AppUser userFromDB = appUser.get();
+                    Set<Game> currentGames = userFromDB.getCurrentGames();
+                    currentGames.add(newGame);
+                    userFromDB.setCurrentGames(currentGames);
+
+                    return appUserRepository.save(userFromDB);
+                }
+                throw new GameException("Game bestaat niet");
+            }
+            throw new GameException("game al toegevoegd");
+        }
+
+    @Override
+    public AppUser addCommentToUser(long userid, Comment newComment) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
+        if (user.isPresent()) {
+            AppUser userFromDb = user.get();
+            Set<Comment> comments = userFromDb.getComments();
+
+            comments.add(newComment);
+            newComment.setUser(userFromDb);
+
+            return appUserRepository.save(userFromDb);
+        }
+        throw new CommentNotFoundException("reactie niet gevonden");
+    }
+    @Override
+    public AppUser addTopicToUser(long userid, Topic newTopic) {
+
+        Optional<AppUser> user = appUserRepository.findById(userid);
+        if(user.isPresent()) {
+            AppUser userFromDb= user.get();
+            Set<Topic> topics = userFromDb.getTopics();
+            topics.add(newTopic);
+            userFromDb.setTopics(topics);
+
+            return appUserRepository.save(userFromDb);
+        }
+        throw new PostNotFoundException("Topic bestaat niet");
+    }
+
+    @Override
+    public AppUser addPlatformToUser(long userid, Platform newPlatform) {
+        Optional<AppUser> appUser = appUserRepository.findById(userid);
+        if (appUser.isPresent()) {
+            AppUser userFromDb = appUser.get();
+            Set<Platform> platforms = userFromDb.getPlatforms();
+
+            platforms.add(newPlatform);
+            userFromDb.setPlatforms(platforms);
+
+            return appUserRepository.save(userFromDb);
+        }
+        throw new UserNotFoundException("gebruiker niet gevonden");
+    }
 
     @Override
     public AppUser addRoleToUser(long roleid, AppUser newUser) {

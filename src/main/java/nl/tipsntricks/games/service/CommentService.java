@@ -59,23 +59,6 @@ public class CommentService implements ICommentService {
         }
         return "Deze reactie bestaat niet";
     }
-    
-
-    @Override
-    public Comment addCommentToUser(Long userid, Comment newComment) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            Set<Comment> comments = userFromDb.getComments();
-
-            comments.add(newComment);
-            newComment.setUser(userFromDb);
-
-            return commentRepository.save(newComment);
-        }
-        throw new CommentNotFoundException("reactie niet gevonden");
-    }
-
 
     private boolean checkIsValidCommentMessage(String message) {
         if (message.contains("tering") || message.equalsIgnoreCase("")) {

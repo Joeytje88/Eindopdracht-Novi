@@ -64,7 +64,7 @@ public class AppUser {
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     Set <Topic> topics;
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany (cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JsonIgnoreProperties("owners")
     @JoinTable (name= "user_platforms",
             joinColumns = @JoinColumn(name= "user_id"),

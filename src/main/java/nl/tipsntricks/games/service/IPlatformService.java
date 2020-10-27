@@ -7,7 +7,6 @@ public interface IPlatformService {
     Platform getPlatformById(long platformid);
     Platform addPlatform(Platform newPlatform);
     Platform updatePlatformByID(Long platformid, Platform updatedPlatform);
-    Platform addPlatformToUser(Long userid, Platform newPlatform);
     String deletePlatformById (Long platformid);
     boolean checkIsValidPlatform (String platformName);
 }

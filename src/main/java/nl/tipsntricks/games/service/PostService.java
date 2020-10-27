@@ -6,6 +6,7 @@ import nl.tipsntricks.games.domain.Post;
 import nl.tipsntricks.games.exception.CommentNotFoundException;
 import nl.tipsntricks.games.exception.PostNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
+import nl.tipsntricks.games.repository.CommentRepository;
 import nl.tipsntricks.games.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import java.util.Set;
 public class PostService implements IPostService {
 
     private final PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private AppUserRepository appUserRepository;
@@ -48,11 +52,8 @@ public class PostService implements IPostService {
             AppUser userFromDb= user.get();
             Set <Post> posts = userFromDb.getPosts();
 
-            AppUser author = new AppUser();
-            author.setPosts(posts);
-
-            posts.add(newPost);
             userFromDb.setPosts(posts);
+            posts.add(newPost);
 
             return postRepository.save(newPost);
         }
@@ -60,13 +61,17 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public Post addCommentToPost(long postid,long commentid, Comment newComment) {
+    public Post addCommentToPost(long postid, long commentid, Comment newComment) {
         Optional<Post> post = postRepository.findById(postid);
-        if (post.isPresent()){
+        Optional<Comment> comment = commentRepository.findById(commentid);
+        if (post.isPresent() && comment.isPresent()){
             Post postFromDb = post.get();
+            Comment commentFromDb = comment.get();
             Set<Comment> postComments = postFromDb.getPostComments();
 
             postComments.add(newComment);
+            commentFromDb.setPost(postFromDb);
+
             postFromDb.setPostComments(postComments);
 
             return postRepository.save(postFromDb);

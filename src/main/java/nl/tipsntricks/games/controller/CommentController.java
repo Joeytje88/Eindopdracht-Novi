@@ -28,11 +28,6 @@ public class CommentController {
         return commentService.getCommentById(commentid);
     }
 
-    @PutMapping(value= "/api/comment/user/{userid}")
-    public Comment addCommentToUser (@PathVariable Long userid,@RequestBody Comment newComment){
-        return commentService.addCommentToUser(userid, newComment);
-    }
-
     @PutMapping(value = "/api/comment/{commentid}")
     public Comment updateCommentById (@PathVariable Long commentid, @RequestBody Comment updatedComment){
         return commentService.updateCommentById(commentid, updatedComment);

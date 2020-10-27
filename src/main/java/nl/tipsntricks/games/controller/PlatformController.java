@@ -38,11 +38,6 @@ public class PlatformController {
         return platformService.updatePlatformByID(platformid, updatedPlatform);
     }
 
-    @PutMapping (value = "api/platform/user/{userid}")
-    Platform addPlatformToUser(@PathVariable Long userid, @RequestBody Platform newPlatform){
-        return platformService.addPlatformToUser(userid, newPlatform);
-    }
-
     @DeleteMapping (value= "api/platform/{platformid}")
     String deletePlatformById (@PathVariable Long platformid){
         return platformService.deletePlatformById(platformid);

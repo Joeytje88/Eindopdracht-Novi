@@ -34,11 +34,6 @@ public class GameController {
         return gamesService.addGame(newGame);
     }
 
-    @PutMapping(value = "/api/game/user/{userid}")
-    public Game addGameToUser (@PathVariable long userid, @RequestBody Game newGame) {
-        return gamesService.addGameToUser(userid, newGame);
-    }
-
     @PutMapping (value = "/api/game/{gameid}")
     public Game updateGameById (@PathVariable long gameid, @RequestBody Game updatedGame){
         return gamesService.updateGameById(gameid, updatedGame);

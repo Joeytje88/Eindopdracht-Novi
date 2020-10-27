@@ -1,6 +1,6 @@
 package nl.tipsntricks.games.controller;
 
-import nl.tipsntricks.games.domain.AppUser;
+import nl.tipsntricks.games.domain.*;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.service.AppUserService;
 import nl.tipsntricks.games.service.IAppUserService;
@@ -39,6 +39,26 @@ public class AppUserController {
     @PutMapping(value = "/api/user/{userid}")
     public AppUser updateUserById(@PathVariable long userid,@RequestBody AppUser updatedAppUser) {
         return appUserService.updateUserById(userid, updatedAppUser);
+    }
+
+    @PutMapping (value ="api/user/game/{userid}")
+    public AppUser addGameToUser(@PathVariable long userid, @RequestBody Game newGame){
+        return appUserService.addGameToUser(userid, newGame);
+    }
+
+    @PostMapping (value = "api/user/comment/{userid}")
+    public AppUser addCommentToUser(@PathVariable long userid, @RequestBody Comment newComment){
+        return appUserService.addCommentToUser(userid, newComment);
+    }
+
+    @PostMapping (value = "api/user/topic/{userid}")
+    public AppUser addTopicToUser (@PathVariable long userid, @RequestBody Topic newTopic){
+        return appUserService.addTopicToUser(userid, newTopic);
+    }
+
+    @PostMapping (value = "api/user/platform/{userid}")
+    public AppUser addPlatformToUser(@PathVariable long userid, @RequestBody Platform newPlatform){
+        return appUserService.addPlatformToUser(userid, newPlatform);
     }
 
     @PreAuthorize("hasRole ('ROLE_ADMIN')")

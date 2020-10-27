@@ -52,21 +52,6 @@ public class PlatformService implements IPlatformService {
     }
 
     @Override
-    public Platform addPlatformToUser(Long userid, Platform newPlatform) {
-        Optional<AppUser> appUser = appUserRepository.findById(userid);
-        if (appUser.isPresent()) {
-            AppUser userFromDb = appUser.get();
-            Set<Platform> platforms = userFromDb.getPlatforms();
-
-            platforms.add(newPlatform);
-            userFromDb.setPlatforms(platforms);
-
-            return platformRepository.save(newPlatform);
-        }
-        throw new PlatformNotFoundExecption("platform niet gevonden");
-    }
-
-    @Override
     public String deletePlatformById(Long platformid) {
         Optional<Platform> platform = platformRepository.findById(platformid);
         if (platform.isPresent()) {
