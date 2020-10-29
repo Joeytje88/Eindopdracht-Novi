@@ -58,12 +58,6 @@ public class AppUser {
             orphanRemoval = true)
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    Set <Post> posts;
-
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    Set <Topic> topics;
-
     @ManyToMany (cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JsonIgnoreProperties("owners")
     @JoinTable (name= "user_platforms",
@@ -146,26 +140,6 @@ public class AppUser {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public Set<Topic> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(Set<Topic> topics) {
-        this.topics = topics;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
-
-    public void setUserid(long userid) {
-        this.userid = userid;
     }
 
     public Set<Game> getCurrentGames() {

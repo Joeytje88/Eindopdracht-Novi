@@ -18,9 +18,7 @@ public class Topic {
         return topicid;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private AppUser author;
+    private String Writer;
 
     public Topic (){
 
@@ -52,5 +50,13 @@ public class Topic {
 
     public void setTopicText(String topicText) {
         this.topicText = topicText;
+    }
+
+    public String getWriter() {
+        return Writer;
+    }
+
+    public void setWriter(String writer) {
+        Writer = writer;
     }
 }

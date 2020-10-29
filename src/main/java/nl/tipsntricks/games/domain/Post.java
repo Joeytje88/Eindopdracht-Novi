@@ -26,10 +26,7 @@ public class Post {
     private String picture;
     private String categorie;
     private String tags;
-
-    @ManyToOne(cascade =  CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private AppUser author;
+    private String author;
 
     @OneToMany (mappedBy = "post")
     Set<Comment> postComments;
@@ -98,11 +95,11 @@ public class Post {
         this.tags = tags;
     }
 
-    public AppUser getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(AppUser author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 

@@ -18,7 +18,7 @@ public class Role {
             name = "native",
             strategy = "native"
     )
-    @Column(columnDefinition = "serial")
+    @Column(columnDefinition = "serial", name ="role_id")
     private long id;
 
     @Enumerated(EnumType.STRING)
