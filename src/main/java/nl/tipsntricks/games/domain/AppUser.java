@@ -142,6 +142,10 @@ public class AppUser {
         this.comments = comments;
     }
 
+    public void setUserid(long userid) {
+        this.userid = userid;
+    }
+
     public Set<Game> getCurrentGames() {
         return currentGames;
     }

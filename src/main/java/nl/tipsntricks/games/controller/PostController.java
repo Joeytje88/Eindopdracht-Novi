@@ -33,10 +33,6 @@ public class PostController {
         return postService.addPost(newPost);
     }
 
-    @PostMapping(value = "api/post/{postid}/comment/")
-    public Post addCommentToPost (@PathVariable long postid, @RequestBody Comment newComment){
-        return postService.addCommentToPost(postid, newComment);
-    }
 
     @PutMapping(value ="api/post/{postid}")
     Post updatePostById(@PathVariable long postid, @RequestBody Post updatedPost){

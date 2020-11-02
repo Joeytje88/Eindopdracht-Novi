@@ -20,9 +20,15 @@ public class CommentService implements ICommentService {
     private final CommentRepository commentRepository;
 
     @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public Comment getCommentById(Long commentid) {
@@ -31,15 +37,21 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Comment addComment(Comment newComment) {
-        String text = newComment.getText();
-        {
-            if (checkIsValidCommentMessage(text)) {
-                return commentRepository.save(newComment);
-            }
-        } throw new CommentNotFoundException("reactie mag geen scheldwoorden bevatten");
-    }
+    public Comment addCommentToPost(long postid, long userid, Comment newComment) {
+        Optional<AppUser> user = appUserRepository.findById(userid);
+        Optional<Post> post = postRepository.findById(postid);
+        if (user.isPresent() && post.isPresent()) {
+            AppUser userfromDb = user.get();
+            Post postFromDb = post.get();
 
+            newComment.setUser(userfromDb);
+            newComment.setPost(postFromDb);
+
+            return commentRepository.save(newComment);
+        }
+
+        throw new CommentNotFoundException("post niet gevonden");
+    }
 
     @Override
     public Comment updateCommentById(Long commentid, Comment updatedComment) {

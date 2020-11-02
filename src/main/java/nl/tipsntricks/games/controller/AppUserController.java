@@ -51,7 +51,6 @@ public class AppUserController {
         return appUserService.addCommentToUser(userid, newComment);
     }
 
-
     @PostMapping (value = "api/user/platform/{userid}")
     public AppUser addPlatformToUser(@PathVariable long userid, @RequestBody Platform newPlatform){
         return appUserService.addPlatformToUser(userid, newPlatform);

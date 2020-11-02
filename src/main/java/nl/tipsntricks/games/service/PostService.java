@@ -46,21 +46,6 @@ public class PostService implements IPostService {
 }
 
     @Override
-    public Post addCommentToPost(long postid, Comment newComment) {
-        Optional<Post> post = postRepository.findById(postid);
-        if (post.isPresent()){
-            Post postFromDb = post.get();
-            Set<Comment> postComments = postFromDb.getPostComments();
-
-            postComments.add(newComment);
-            postFromDb.setPostComments(postComments);
-
-            return postRepository.save(postFromDb);
-        }
-        throw new PostNotFoundException("post niet gevonden");
-    }
-
-    @Override
     public Post updatePostById(long postid, Post updatedPost) {
         return postRepository.findById(postid).map(
                 post -> {
@@ -76,7 +61,6 @@ public class PostService implements IPostService {
                     return postRepository.save(updatedPost);
                 });
     }
-
 
     @Override
     public String deletePostById(long postid) {
