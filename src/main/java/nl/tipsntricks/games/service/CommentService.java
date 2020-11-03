@@ -4,6 +4,8 @@ import nl.tipsntricks.games.domain.AppUser;
 import nl.tipsntricks.games.domain.Comment;
 import nl.tipsntricks.games.domain.Post;
 import nl.tipsntricks.games.exception.CommentNotFoundException;
+import nl.tipsntricks.games.exception.PostNotFoundException;
+import nl.tipsntricks.games.exception.UserNotFoundException;
 import nl.tipsntricks.games.repository.AppUserRepository;
 import nl.tipsntricks.games.repository.CommentRepository;
 import nl.tipsntricks.games.repository.PostRepository;
@@ -23,12 +25,12 @@ public class CommentService implements ICommentService {
     private AppUserRepository appUserRepository;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
-
-    @Autowired
-    private PostRepository postRepository;
 
     @Override
     public Comment getCommentById(Long commentid) {
@@ -37,7 +39,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Comment addCommentToPost(long postid, long userid, Comment newComment) {
+    public Comment addCommentToPost(long userid,long postid, Comment newComment) {
         Optional<AppUser> user = appUserRepository.findById(userid);
         Optional<Post> post = postRepository.findById(postid);
         if (user.isPresent() && post.isPresent()) {
@@ -47,11 +49,13 @@ public class CommentService implements ICommentService {
             newComment.setUser(userfromDb);
             newComment.setPost(postFromDb);
 
+
             return commentRepository.save(newComment);
         }
+        throw new UserNotFoundException("gebruiker niet gevonden") ;
 
-        throw new CommentNotFoundException("post niet gevonden");
     }
+
 
     @Override
     public Comment updateCommentById(Long commentid, Comment updatedComment) {

@@ -19,12 +19,6 @@ public class PostService implements IPostService {
 
     private final PostRepository postRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
-    private AppUserRepository appUserRepository;
-
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }

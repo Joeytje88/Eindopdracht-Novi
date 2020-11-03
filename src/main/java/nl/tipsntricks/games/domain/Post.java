@@ -22,13 +22,14 @@ public class Post {
     @Lob
     private String postText;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String picture;
     private String categorie;
     private String tags;
     private String author;
 
     @OneToMany (mappedBy = "post")
+    @JsonIgnoreProperties("post")
     Set<Comment> postComments;
 
     public long getPostId() {

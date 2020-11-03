@@ -8,7 +8,6 @@ public interface IAppUserService {
     String deleteUser(Long userid);
     AppUser addPlatformToUser(long userid, Platform newPlatform);
     AppUser addGameToUser (long userid, Game newGame);
-    AppUser addCommentToUser(long userid, Comment newComment);
     AppUser demoteUserById(long userid);
     AppUser addRoleToUser(long roleid, AppUser newUser);
 }

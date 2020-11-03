@@ -44,7 +44,6 @@ public class AppUserService implements IAppUserService {
                     appUser.setEmail(updatedUser.getEmail());
                     appUser.setPassword(updatedUser.getPassword());
                     appUser.setPicture(updatedUser.getPicture());
-                    appUser.setUrl(updatedUser.getUrl());
                     return appUserRepository.save(appUser);
                 }).orElseGet(() -> {
             updatedUser.setUserId(userid);
@@ -79,20 +78,6 @@ public class AppUserService implements IAppUserService {
             throw new GameException("game al toegevoegd");
         }
 
-    @Override
-    public AppUser addCommentToUser(long userid, Comment newComment) {
-        Optional<AppUser> user = appUserRepository.findById(userid);
-        if (user.isPresent()) {
-            AppUser userFromDb = user.get();
-            Set<Comment> comments = userFromDb.getComments();
-
-            comments.add(newComment);
-            newComment.setUser(userFromDb);
-
-            return appUserRepository.save(userFromDb);
-        }
-        throw new CommentNotFoundException("reactie niet gevonden");
-    }
 
     @Override
     public AppUser addPlatformToUser(long userid, Platform newPlatform) {

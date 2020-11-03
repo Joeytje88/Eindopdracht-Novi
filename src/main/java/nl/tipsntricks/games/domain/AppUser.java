@@ -39,7 +39,6 @@ public class AppUser {
     @Lob
     private String picture;
 
-    private String Url;
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable (name = "user_role",
@@ -112,14 +111,6 @@ public class AppUser {
 
     public void setPicture(String picture) {
         this.picture = picture;
-    }
-
-    public String getUrl() {
-        return Url;
-    }
-
-    public void setUrl(String url) {
-        Url = url;
     }
 
     public Set<Platform> getPlatforms() {

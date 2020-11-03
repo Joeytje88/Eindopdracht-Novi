@@ -21,7 +21,7 @@ public class AppUserController {
     @Autowired
     private IAppUserService appUserService;
 
-    @GetMapping(value = "/api/user")
+    @GetMapping(value = "/api/users")
     public List<AppUser> getAllUsers() {
         return appUserRepository.findAll();
     }
@@ -44,11 +44,6 @@ public class AppUserController {
     @PutMapping (value ="api/user/game/{userid}")
     public AppUser addGameToUser(@PathVariable long userid, @RequestBody Game newGame){
         return appUserService.addGameToUser(userid, newGame);
-    }
-
-    @PostMapping (value = "api/user/comment/{userid}")
-    public AppUser addCommentToUser(@PathVariable long userid, @RequestBody Comment newComment){
-        return appUserService.addCommentToUser(userid, newComment);
     }
 
     @PostMapping (value = "api/user/platform/{userid}")
