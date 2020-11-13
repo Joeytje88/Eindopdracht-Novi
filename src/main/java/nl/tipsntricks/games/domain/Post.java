@@ -19,7 +19,7 @@ public class Post {
 
     private String header;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String postText;
 
     @Column(columnDefinition = "text")
@@ -29,7 +29,7 @@ public class Post {
     private String author;
 
     @OneToMany (mappedBy = "post")
-    @JsonIgnoreProperties("post")
+    //@JsonIgnoreProperties("post")
     Set<Comment> postComments;
 
     public long getPostId() {

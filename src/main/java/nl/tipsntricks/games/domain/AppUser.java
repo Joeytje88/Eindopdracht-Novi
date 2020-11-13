@@ -36,7 +36,8 @@ public class AppUser {
 
     private String password;
 
-    @Lob
+    // NICK: @Lob
+    @Column(columnDefinition = "TEXT")
     private String picture;
 
 
@@ -47,7 +48,7 @@ public class AppUser {
     private Set <Role> roles;
 
     @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("users")
+    //@JsonIgnoreProperties("users")
     @JoinTable (name = "user_games",
             joinColumns = @JoinColumn (name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "game_id"))
@@ -58,7 +59,7 @@ public class AppUser {
     private Set<Comment> comments;
 
     @ManyToMany (cascade = CascadeType.ALL, fetch= FetchType.LAZY)
-    @JsonIgnoreProperties("owners")
+    //@JsonIgnoreProperties("owners")
     @JoinTable (name= "user_platforms",
             joinColumns = @JoinColumn(name= "user_id"),
             inverseJoinColumns = @JoinColumn (name= "platform_id"))

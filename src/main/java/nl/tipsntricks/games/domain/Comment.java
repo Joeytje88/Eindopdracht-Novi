@@ -1,6 +1,5 @@
 package nl.tipsntricks.games.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
