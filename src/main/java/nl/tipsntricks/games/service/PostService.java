@@ -1,18 +1,11 @@
 package nl.tipsntricks.games.service;
 
-import nl.tipsntricks.games.domain.AppUser;
-import nl.tipsntricks.games.domain.Comment;
 import nl.tipsntricks.games.domain.Post;
-import nl.tipsntricks.games.exception.CommentNotFoundException;
 import nl.tipsntricks.games.exception.PostNotFoundException;
-import nl.tipsntricks.games.repository.AppUserRepository;
-import nl.tipsntricks.games.repository.CommentRepository;
 import nl.tipsntricks.games.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class PostService implements IPostService {
@@ -31,11 +24,11 @@ public class PostService implements IPostService {
 
     @Override
     public Post addPost(Post newPost) {
-            String postTitle = newPost.getPostTitle();
-            if (checkIsValidName(postTitle)) {
-        return postRepository.save(newPost);
-    }
-    throw new PostNotFoundException("post bestaat niet");
+        String postTitle = newPost.getPostTitle();
+        if (checkIsValidName(postTitle)) {
+            return postRepository.save(newPost);
+        }
+        throw new PostNotFoundException("post bestaat niet");
 
 }
 

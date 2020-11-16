@@ -1,5 +1,6 @@
 package nl.tipsntricks.games.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,11 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
-
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "userid")
 @Entity
+@Table(name = "users")
 public class AppUser {
 
     @Id
@@ -36,7 +39,6 @@ public class AppUser {
 
     private String password;
 
-    // NICK: @Lob
     @Column(columnDefinition = "TEXT")
     private String picture;
 

@@ -37,6 +37,13 @@ public class AppUserService implements IAppUserService {
     }
 
     @Override
+    public AppUser getUserByUsername(String username) {
+        return appUserRepository.findByUsername("username")
+                .orElseThrow(()-> new UserNotFoundException(username));
+    }
+
+
+    @Override
     public AppUser updateUserById(Long userid, AppUser updatedUser) {
         return appUserRepository.findById(userid).map(
                 appUser -> {

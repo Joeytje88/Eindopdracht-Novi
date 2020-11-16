@@ -49,7 +49,6 @@ public class CommentService implements ICommentService {
             newComment.setUser(userfromDb);
             newComment.setPost(postFromDb);
 
-
             return commentRepository.save(newComment);
         }
         throw new UserNotFoundException("gebruiker niet gevonden") ;

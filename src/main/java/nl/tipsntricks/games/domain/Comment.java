@@ -1,12 +1,16 @@
 package nl.tipsntricks.games.domain;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 
-@CrossOrigin(origins = "*",maxAge = 3600)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "commentid")
+
 @Entity
 public class Comment {
 
@@ -56,7 +60,7 @@ public class Comment {
         this.image = image;
     }
 
-    public AppUser user() {
+    public AppUser getUser() {
         return user;
     }
 

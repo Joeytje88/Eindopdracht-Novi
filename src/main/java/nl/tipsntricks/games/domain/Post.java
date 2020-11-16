@@ -1,10 +1,14 @@
 package nl.tipsntricks.games.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "postId")
 @Entity
 public class Post {
     @Id
@@ -29,7 +33,6 @@ public class Post {
     private String author;
 
     @OneToMany (mappedBy = "post")
-    //@JsonIgnoreProperties("post")
     Set<Comment> postComments;
 
     public long getPostId() {
